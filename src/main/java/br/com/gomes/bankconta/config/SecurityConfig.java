@@ -47,6 +47,8 @@ public class SecurityConfig {
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers((headers) -> headers.disable());
 		}
+		
+		//http.headers((headers) -> headers.disable());
 
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
