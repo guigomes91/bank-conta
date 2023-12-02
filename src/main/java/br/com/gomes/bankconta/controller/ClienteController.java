@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/clientes")
 public class ClienteController {
-	
+
 	@Autowired
 	private ClienteService service;
 
@@ -33,20 +33,17 @@ public class ClienteController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ClienteDTO> atualizar(@Valid @RequestBody ClienteDTO objDTO, @PathVariable UUID id) {
 		ClienteEntity clienteEntity = service.update(objDTO, id);
-		
 		return ResponseEntity.ok().body(new ClienteDTO(clienteEntity));
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> consultar() {
 		List<ClienteEntity> clientesEntity = service.consultar();
-		
+
 		return ResponseEntity.ok(new ClienteDTO().entityToListDTO(clientesEntity));
 	}
-	
-	
 }

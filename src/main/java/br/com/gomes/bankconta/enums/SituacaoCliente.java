@@ -2,9 +2,9 @@ package br.com.gomes.bankconta.enums;
 
 public enum SituacaoCliente {
 
-	ATIVO(0, "ATIVO"), 
-	EXCLUIDO(1, "EXCLUIDO"),
-	INATIVO(2, "INATIVO");
+	EXCLUIDO(0, "EXCLUIDO"), 
+	ATIVO(1, "ATIVO"),
+	AUSENTE(2, "AUSENTE");
 	
 	private Integer codigo;
 	private String descricao;

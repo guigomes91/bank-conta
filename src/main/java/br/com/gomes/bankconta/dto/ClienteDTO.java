@@ -12,21 +12,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.gomes.bankconta.entities.ClienteEntity;
 import br.com.gomes.bankconta.enums.Perfil;
+import br.com.gomes.bankconta.enums.SituacaoCliente;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 public class ClienteDTO {
 
 	private UUID id;
@@ -67,28 +64,31 @@ public class ClienteDTO {
 	@NotBlank(message = "Campo senha é requerido")
 	private String senha;
 	
+	private SituacaoCliente situacao;
+	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
-	@Builder.Default
 	protected Set<Integer> perfis = new HashSet<>();
 	
 	public ClienteDTO() {
 		addPerfil(Perfil.CLIENTE);
 	}
 
-	public ClienteDTO(ClienteEntity obj) {
-		this.id = obj.getId();
-		this.nome = obj.getNome();
-		this.cpf = obj.getCpf();
-		this.email = obj.getEmail();
-		this.senha = obj.getSenha();
-		this.bairro = obj.getBairro();
-		this.endereco = obj.getEndereco();
-		this.cidade = obj.getCidade();
-		this.cep = obj.getCep();
-		this.dataNascimento = obj.getDataNascimento();
-		this.estado = obj.getEstado();
-		this.perfis = obj.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
+	public ClienteDTO(ClienteEntity clienteEntity) {
+		this.id = clienteEntity.getId();
+		this.nome = clienteEntity.getNome();
+		this.cpf = clienteEntity.getCpf();
+		this.email = clienteEntity.getEmail();
+		this.senha = clienteEntity.getSenha();
+		this.bairro = clienteEntity.getBairro();
+		this.endereco = clienteEntity.getEndereco();
+		this.cidade = clienteEntity.getCidade();
+		this.cep = clienteEntity.getCep();
+		this.dataNascimento = clienteEntity.getDataNascimento();
+		this.estado = clienteEntity.getEstado();
+		this.situacao = SituacaoCliente.toEnum(clienteEntity.getSituacao().getCodigo());
+		this.telefone = clienteEntity.getTelefone();
+		this.perfis = clienteEntity.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
 		addPerfil(Perfil.CLIENTE);
 	}
 	

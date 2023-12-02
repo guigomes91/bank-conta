@@ -85,6 +85,7 @@ public class ClienteEntity {
 		this.estado = dto.getEstado();
 		this.telefone = dto.getTelefone();
 		this.senha = dto.getSenha();
+		this.situacao = dto.getSituacao();
 		this.perfis = dto.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
 	}
 	
