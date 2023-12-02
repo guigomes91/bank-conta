@@ -1,5 +1,6 @@
 package br.com.gomes.bankconta.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,8 @@ public class ClienteService {
 		return repository.save(clienteOld);
 	}
 
+	public List<ClienteEntity> consultar() {
+		return repository.findAll();
+	}
 	
 }

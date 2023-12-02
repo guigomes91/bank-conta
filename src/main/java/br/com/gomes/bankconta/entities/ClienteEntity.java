@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.gomes.bankconta.dto.ClienteDTO;
 import br.com.gomes.bankconta.enums.Perfil;
+import br.com.gomes.bankconta.enums.SituacaoCliente;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -44,29 +45,24 @@ public class ClienteEntity {
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
-	@NotBlank
 	@Column(unique = true)
 	private String email;
 	
-	@NotBlank
 	private String endereco;
 	
-	@NotBlank
 	private String bairro;
 	
-	@NotBlank
 	private String cidade;
 	
 	private int cep;
 	
-	@NotBlank
 	private String estado;
 	
-	@NotBlank
 	private String telefone;
 	
-	@NotBlank
 	private String senha;
+	
+	private SituacaoCliente situacao;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")

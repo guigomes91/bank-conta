@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.dto;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,11 +18,15 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class ClienteDTO {
 
 	private UUID id;
@@ -64,6 +69,7 @@ public class ClienteDTO {
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
+	@Builder.Default
 	protected Set<Integer> perfis = new HashSet<>();
 	
 	public ClienteDTO() {
@@ -84,6 +90,10 @@ public class ClienteDTO {
 		this.estado = obj.getEstado();
 		this.perfis = obj.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
 		addPerfil(Perfil.CLIENTE);
+	}
+	
+	public List<ClienteDTO> entityToListDTO(List<ClienteEntity> clientes) {
+		return clientes.stream().map(entity -> new ClienteDTO(entity)).collect(Collectors.toList());
 	}
 	
 	public Set<Perfil> getPerfis() {
