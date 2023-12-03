@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.gomes.bankconta.entities.ClienteEntity;
@@ -94,6 +95,15 @@ public class ClienteDTO {
 	
 	public List<ClienteDTO> entityToListDTO(List<ClienteEntity> clientes) {
 		return clientes.stream().map(entity -> new ClienteDTO(entity)).collect(Collectors.toList());
+	}
+	
+	public Page<ClienteDTO> entityPageToDTO(Page<ClienteEntity> pageEntity) {
+		Page<ClienteDTO> clienteDTO = pageEntity.map(entity -> {
+			ClienteDTO dto = new ClienteDTO(entity);
+	        return dto;
+	    });
+		
+		return clienteDTO;
 	}
 	
 	public Set<Perfil> getPerfis() {
