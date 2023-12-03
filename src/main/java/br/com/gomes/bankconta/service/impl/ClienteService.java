@@ -53,6 +53,10 @@ public class ClienteService {
 		return repository.findAll();
 	}
 	
+	public ClienteEntity consultarPorId(UUID id) {
+		return clienteValidator.verificaClienteExistente(id);
+	}
+	
 	public void excluir(UUID id) {
 		ClienteEntity clienteEntity = clienteValidator.verificaClienteExistente(id);
 		clienteEntity.setSituacao(SituacaoCliente.EXCLUIDO);

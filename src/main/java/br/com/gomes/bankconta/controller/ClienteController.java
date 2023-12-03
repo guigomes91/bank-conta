@@ -48,6 +48,13 @@ public class ClienteController {
 		return ResponseEntity.ok(new ClienteDTO().entityToListDTO(clientesEntity));
 	}
 	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<ClienteDTO> consultarPorId(@PathVariable UUID id) {
+		ClienteEntity clienteEntity = service.consultarPorId(id);
+
+		return ResponseEntity.ok(new ClienteDTO(clienteEntity));
+	}
+	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<ClienteDTO> excluir(@PathVariable UUID id) {
 		service.excluir(id);
