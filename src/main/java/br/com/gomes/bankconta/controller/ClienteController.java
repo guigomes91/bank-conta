@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,11 @@ public class ClienteController {
 		List<ClienteEntity> clientesEntity = service.consultar();
 
 		return ResponseEntity.ok(new ClienteDTO().entityToListDTO(clientesEntity));
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<ClienteDTO> excluir(@PathVariable UUID id) {
+		service.excluir(id);
+		return ResponseEntity.noContent().build();
 	}
 }

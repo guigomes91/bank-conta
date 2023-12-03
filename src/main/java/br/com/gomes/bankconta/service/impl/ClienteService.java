@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.gomes.bankconta.dto.ClienteDTO;
 import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.enums.SituacaoCliente;
 import br.com.gomes.bankconta.repository.ClienteRepository;
-import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 import br.com.gomes.bankconta.validators.ClienteValidator;
 
 @Service
@@ -37,7 +37,7 @@ public class ClienteService {
 	
 	public ClienteEntity update(ClienteDTO objDTO, UUID id) {
 		objDTO.setId(id);
-		ClienteEntity clienteOld = repository.findById(id).orElseThrow((() -> new ObjectNotFoundException("Cliente não encontrado!")));
+		ClienteEntity clienteOld = clienteValidator.verificaClienteExistente(id);
 		
 		if (!objDTO.getSenha().equals(clienteOld.getSenha())) {
 			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
@@ -51,6 +51,13 @@ public class ClienteService {
 
 	public List<ClienteEntity> consultar() {
 		return repository.findAll();
+	}
+	
+	public void excluir(UUID id) {
+		ClienteEntity clienteEntity = clienteValidator.verificaClienteExistente(id);
+		clienteEntity.setSituacao(SituacaoCliente.EXCLUIDO);
+		
+		repository.save(clienteEntity);
 	}
 	
 }

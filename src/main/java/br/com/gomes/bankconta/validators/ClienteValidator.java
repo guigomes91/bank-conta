@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.validators;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import br.com.gomes.bankconta.entities.ClienteEntity;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import br.com.gomes.bankconta.repository.ClienteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
+import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 
 @Component
 public class ClienteValidator {
@@ -23,6 +25,10 @@ public class ClienteValidator {
 		validaCpf(clienteDTO);
 		validaEmail(clienteDTO);
 		validarSituacao(clienteDTO);
+	}
+	
+	public ClienteEntity verificaClienteExistente(UUID id) {
+		return repository.findById(id).orElseThrow((() -> new ObjectNotFoundException("Cliente não encontrado!")));
 	}
 
 	public void validaDataNascimento(ClienteDTO clienteDTO) {
