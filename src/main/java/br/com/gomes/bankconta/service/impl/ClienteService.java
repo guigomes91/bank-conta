@@ -28,27 +28,27 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
-	public ClienteEntity create(ClienteDTO objDTO) {
-		objDTO.setId(null);
-		objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+	public ClienteEntity create(ClienteDTO clienteDTO) {
+		clienteDTO.setId(null);
+		clienteDTO.setSenha(encoder.encode(clienteDTO.getSenha()));
 
-		clienteValidator.validaTodasCondicoesParaSalvarCliente(objDTO);
+		clienteValidator.validaTodasCondicoesParaSalvarCliente(clienteDTO);
 
-		ClienteEntity newObj = new ClienteEntity(objDTO);
+		ClienteEntity newObj = new ClienteEntity(clienteDTO);
 		return repository.save(newObj);
 	}
 
-	public ClienteEntity update(ClienteDTO objDTO, UUID id) {
-		objDTO.setId(id);
+	public ClienteEntity update(ClienteDTO clienteDTO, UUID id) {
+		clienteDTO.setId(id);
 		ClienteEntity clienteOld = clienteValidator.verificaClienteExistente(id);
 
-		if (!objDTO.getSenha().equals(clienteOld.getSenha())) {
-			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+		if (!clienteDTO.getSenha().equals(clienteOld.getSenha())) {
+			clienteDTO.setSenha(encoder.encode(clienteDTO.getSenha()));
 		}
 
-		clienteValidator.validaTodasCondicoesParaSalvarCliente(objDTO);
+		clienteValidator.validaTodasCondicoesParaSalvarCliente(clienteDTO);
 
-		clienteOld = new ClienteEntity(objDTO);
+		clienteOld = new ClienteEntity(clienteDTO);
 		return repository.save(clienteOld);
 	}
 

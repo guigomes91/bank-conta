@@ -1,6 +1,7 @@
 package br.com.gomes.bankconta.entities;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -64,6 +65,8 @@ public class ClienteEntity {
 	
 	private SituacaoCliente situacao;
 	
+    private Date dataCriacao;
+	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>();
@@ -86,6 +89,7 @@ public class ClienteEntity {
 		this.telefone = dto.getTelefone();
 		this.senha = dto.getSenha();
 		this.situacao = dto.getSituacao();
+		this.dataCriacao = dto.getDataCriacao();
 		this.perfis = dto.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
 	}
 	

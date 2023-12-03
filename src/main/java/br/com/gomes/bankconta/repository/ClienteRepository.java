@@ -16,12 +16,9 @@ import br.com.gomes.bankconta.entities.ClienteEntity;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, UUID> {
 
 	Optional<ClienteEntity> findByCpf(long cpf);
-	Optional<ClienteEntity> findByEmail(String email);	
-	
-	@Query("FROM ClienteEntity c " +
-	           "WHERE LOWER(c.nome) like %:searchTerm% " +
-	           "OR LOWER(c.email) like %:searchTerm%")
-	    Page<ClienteEntity> consultarPorNomeOuEmail(
-	            @Param("searchTerm") String searchTerm, 
-	            Pageable pageable);
+
+	Optional<ClienteEntity> findByEmail(String email);
+
+	@Query("FROM ClienteEntity c WHERE LOWER(c.nome) like %:searchTerm% OR LOWER(c.email) like %:searchTerm%")
+	Page<ClienteEntity> consultarPorNomeOuEmail(@Param("searchTerm") String searchTerm, Pageable pageable);
 }

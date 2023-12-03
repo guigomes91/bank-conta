@@ -1,6 +1,7 @@
 package br.com.gomes.bankconta.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -67,6 +68,8 @@ public class ClienteDTO {
 	
 	private SituacaoCliente situacao;
 	
+    private Date dataCriacao = new Date();
+	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>();
@@ -90,6 +93,7 @@ public class ClienteDTO {
 		this.situacao = SituacaoCliente.toEnum(clienteEntity.getSituacao().getCodigo());
 		this.telefone = clienteEntity.getTelefone();
 		this.perfis = clienteEntity.getPerfis().stream().map(p -> p.getCodigo()).collect(Collectors.toSet());
+		this.dataCriacao = clienteEntity.getDataCriacao();
 		addPerfil(Perfil.CLIENTE);
 	}
 	
