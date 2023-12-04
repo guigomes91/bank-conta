@@ -10,7 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,8 @@ public abstract class Conta {
 	@Column(unique = true)
 	private int agencia;
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
 	private ClienteEntity cliente;
 	
 	private BigDecimal saldo;

@@ -28,10 +28,15 @@ public class MovimentoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
+	
 	private LocalDateTime dataHoraMovimento = LocalDateTime.now();
+	
 	private String numeroDocumento;
+	
 	private BigDecimal valor = BigDecimal.ZERO;
+	
 	private String descricao;
+	
 	private TipoMovimento tipoMovimento;
 	
 	@ManyToOne
