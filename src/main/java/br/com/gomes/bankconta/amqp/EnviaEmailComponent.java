@@ -3,20 +3,20 @@ package br.com.gomes.bankconta.amqp;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-@Component
-public class FooBarComponent {
+import br.com.gomes.bankconta.utils.AMQPConstantes;
 
-	static final String topicExchangeName = "gomes-bank-email";
+@Component
+public class EnviaEmailComponent {
 
 	private final RabbitTemplate rabbitTemplate;
 
-	public FooBarComponent(RabbitTemplate rabbitTemplate) {
+	public EnviaEmailComponent(RabbitTemplate rabbitTemplate) {
 		this.rabbitTemplate = rabbitTemplate;
 	}
 
 	public void enviarEmail(String email) throws Exception {
 		System.out.println("Sending message with email " + email + "...");
 		
-		rabbitTemplate.convertAndSend(topicExchangeName, "gomes.bank.email", email);
+		rabbitTemplate.convertAndSend(AMQPConstantes.TOPIC_EXCHANGE_NAME, "gomes.bank.email", email);
 	}
 }

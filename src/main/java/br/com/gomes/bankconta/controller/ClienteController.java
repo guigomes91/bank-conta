@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.gomes.bankconta.amqp.FooBarComponent;
+import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.ClienteDTO;
 import br.com.gomes.bankconta.entities.ClienteEntity;
 import br.com.gomes.bankconta.service.impl.ClienteService;
@@ -31,7 +31,7 @@ public class ClienteController {
 	private ClienteService service;
 	
 	@Autowired
-	private FooBarComponent emailComponent;
+	private EnviaEmailComponent emailComponent;
 
 	@PostMapping
 	public ResponseEntity<ClienteDTO> salvar(@Valid @RequestBody ClienteDTO objDTO) {
