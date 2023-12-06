@@ -35,6 +35,7 @@ public class ClienteService {
 		clienteValidator.validaTodasCondicoesParaSalvarCliente(clienteDTO);
 
 		ClienteEntity newObj = new ClienteEntity(clienteDTO);
+		
 		return repository.save(newObj);
 	}
 
