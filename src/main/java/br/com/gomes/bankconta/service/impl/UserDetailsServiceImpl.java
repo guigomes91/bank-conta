@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.repository.ClienteRepository;
 import br.com.gomes.bankconta.security.UserSS;
 

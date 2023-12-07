@@ -1,9 +1,10 @@
-package br.com.gomes.bankconta.entities;
+package br.com.gomes.bankconta.entities.conta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.TipoConta;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

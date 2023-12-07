@@ -10,8 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.gomes.bankconta.dto.ClienteDTO;
-import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import br.com.gomes.bankconta.repository.ClienteRepository;
 import br.com.gomes.bankconta.validators.ClienteValidator;

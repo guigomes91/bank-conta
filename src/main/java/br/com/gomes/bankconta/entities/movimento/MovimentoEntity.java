@@ -1,9 +1,10 @@
-package br.com.gomes.bankconta.entities;
+package br.com.gomes.bankconta.entities.movimento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

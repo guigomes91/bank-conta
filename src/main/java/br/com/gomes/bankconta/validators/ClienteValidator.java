@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.gomes.bankconta.dto.ClienteDTO;
-import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import br.com.gomes.bankconta.repository.ClienteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;

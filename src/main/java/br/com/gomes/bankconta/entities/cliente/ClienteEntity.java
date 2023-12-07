@@ -1,4 +1,4 @@
-package br.com.gomes.bankconta.entities;
+package br.com.gomes.bankconta.entities.cliente;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.gomes.bankconta.dto.ClienteDTO;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.enums.Perfil;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import jakarta.persistence.CollectionTable;

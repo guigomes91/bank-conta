@@ -1,10 +1,11 @@
-package br.com.gomes.bankconta.entities;
+package br.com.gomes.bankconta.entities.conta;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;

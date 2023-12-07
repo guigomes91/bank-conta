@@ -1,4 +1,4 @@
-package br.com.gomes.bankconta.dto;
+package br.com.gomes.bankconta.dto.cliente;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.Perfil;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import jakarta.persistence.CollectionTable;

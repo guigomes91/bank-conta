@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
-import br.com.gomes.bankconta.dto.ClienteDTO;
-import br.com.gomes.bankconta.entities.ClienteEntity;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
+import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.service.impl.ClienteService;
 import jakarta.validation.Valid;
 
