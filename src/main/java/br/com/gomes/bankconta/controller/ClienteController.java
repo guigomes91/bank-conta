@@ -34,16 +34,25 @@ public class ClienteController {
 	private EnviaEmailComponent emailComponent;
 
 	@PostMapping
-	public ResponseEntity<ClienteDTO> salvar(@Valid @RequestBody ClienteDTO objDTO) {
-		ClienteEntity newObj = service.create(objDTO);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
+	public ResponseEntity<ClienteDTO> salvar(@Valid @RequestBody ClienteDTO clienteDTO) {
+		ClienteEntity clienteEntity = service.create(clienteDTO);
+		
+		URI uri = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(clienteEntity.getId())
+				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClienteDTO> atualizar(@Valid @RequestBody ClienteDTO objDTO, @PathVariable UUID id) {
-		ClienteEntity clienteEntity = service.update(objDTO, id);
-		return ResponseEntity.ok().body(new ClienteDTO(clienteEntity));
+	public ResponseEntity<ClienteDTO> atualizar(
+			@Valid @RequestBody ClienteDTO clienteDTO, 
+			@PathVariable UUID id) {
+		ClienteEntity clienteEntity = service.update(clienteDTO, id);
+		return ResponseEntity
+				.ok()
+				.body(new ClienteDTO(clienteEntity));
 	}
 
 	@GetMapping
