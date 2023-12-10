@@ -22,4 +22,12 @@ public class ContaCorrenteValidator {
 			new DataIntegrityViolationException("Conta já existe!");
 		});
 	}
+	
+	public void verificaClienteJaTemContaCorrente(ContaCorrenteEntity ccEntity) {
+		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByCliente(ccEntity.getCliente());
+		
+		contaCorrenteEntity.ifPresent(cc -> {
+			new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
+		});
+	}
 }

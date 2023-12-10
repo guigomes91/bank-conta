@@ -14,7 +14,7 @@ public class EnviaEmailComponent {
 		this.rabbitTemplate = rabbitTemplate;
 	}
 
-	public void enviarEmail(String email) throws Exception {
+	public void enviarEmail(String email) {
 		System.out.println("Sending message with email " + email + "...");
 		
 		rabbitTemplate.convertAndSend(AMQPConstantes.TOPIC_EXCHANGE_NAME, "gomes.bank.email", email);
