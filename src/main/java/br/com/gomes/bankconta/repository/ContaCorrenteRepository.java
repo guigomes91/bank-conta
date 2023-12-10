@@ -13,5 +13,6 @@ import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 public interface ContaCorrenteRepository extends JpaRepository<ContaCorrenteEntity, UUID> {
 
 	Optional<ContaCorrenteEntity> findByNumeroContaAndAgencia(int numeroConta, int agencia);
+	
 	Optional<ContaCorrenteEntity> findByCliente(ClienteEntity cliente);
 }

@@ -27,7 +27,7 @@ public class ContaCorrenteValidator {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByCliente(ccEntity.getCliente());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
-			new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
+			throw new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
 		});
 	}
 }
