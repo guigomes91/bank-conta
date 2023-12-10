@@ -6,12 +6,11 @@ import java.util.UUID;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.enums.TipoConta;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,11 +22,12 @@ public class ContaCorrenteInputDTO {
 	
 	private int agencia;
 	
+	@NotNull
 	private ClienteEntity cliente;
 	
 	private BigDecimal saldo;
 	
-	private TipoConta tipoConta;
+	private TipoConta tipoConta = TipoConta.CC;
 	
 	public ContaCorrenteInputDTO(ContaCorrenteEntity entity) {
 		this.id = entity.getId();
@@ -35,6 +35,5 @@ public class ContaCorrenteInputDTO {
 		this.agencia = entity.getAgencia();
 		this.cliente = entity.getCliente();
 		this.saldo = entity.getSaldo();
-		this.tipoConta = entity.getTipoConta();
 	}
 }

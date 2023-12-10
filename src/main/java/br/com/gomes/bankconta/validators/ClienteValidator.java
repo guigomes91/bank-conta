@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
+import br.com.gomes.bankconta.enums.Perfil;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
 import br.com.gomes.bankconta.repository.ClienteRepository;
+import br.com.gomes.bankconta.resources.exceptions.BadRequestException;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 
@@ -55,12 +57,20 @@ public class ClienteValidator {
 	
 	public void validarSituacao(ClienteDTO clienteDTO) {
 		if (Objects.isNull(clienteDTO.getSituacao())) {
-			throw new DataIntegrityViolationException("Situação é obrigatória!");
+			throw new BadRequestException("Situação é obrigatória!");
 		}
 		
 		SituacaoCliente situacao = SituacaoCliente.toEnum(clienteDTO.getSituacao().getCodigo());
 		if (situacao == null) {
-			throw new DataIntegrityViolationException("Situação inválida");
+			throw new BadRequestException("Situação inválida");
+		}
+	}
+	
+	public void verificaPerfilAdmin(UUID idCliente) {
+		ClienteEntity clienteEntity = this.verificaClienteExistente(idCliente);
+		
+		if (!clienteEntity.getPerfis().contains(Perfil.ADMIN)) {
+			throw new BadRequestException("Você não tem permissão para essa operação!");
 		}
 	}
 }

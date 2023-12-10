@@ -40,6 +40,7 @@ public abstract class Conta {
 	private ClienteEntity cliente;
 	
 	private BigDecimal saldo;
+	
 	private TipoConta tipoConta;
 	
 	private LocalDate dataCriacao = LocalDate.now();
