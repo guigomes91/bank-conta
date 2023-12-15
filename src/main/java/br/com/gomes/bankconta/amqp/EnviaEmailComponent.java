@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 import br.com.gomes.bankconta.dto.cliente.EmailClienteInput;
 import br.com.gomes.bankconta.utils.AMQPConstantes;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class EnviaEmailComponent {
 
@@ -16,8 +18,7 @@ public class EnviaEmailComponent {
 	}
 
 	public void enviarEmail(String email) {
-		System.out.println("Sending message with email " + email + "...");
-		
+		log.info("Sending message with email {}", email);
 		rabbitTemplate.convertAndSend(AMQPConstantes.TOPIC_EXCHANGE_NAME, "gomes.bank.email", new EmailClienteInput(email));
 	}
 }

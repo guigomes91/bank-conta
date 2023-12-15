@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.service.impl.ClienteService;
@@ -29,9 +28,6 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService service;
-	
-	@Autowired
-	private EnviaEmailComponent emailComponent;
 
 	@PostMapping
 	public ResponseEntity<ClienteDTO> salvar(@Valid @RequestBody ClienteDTO clienteDTO) {
@@ -87,16 +83,5 @@ public class ClienteController {
 	public ResponseEntity<ClienteDTO> excluir(@PathVariable UUID id) {
 		service.excluir(id);
 		return ResponseEntity.noContent().build();
-	}
-	
-	@PostMapping(value = "/enviaEmail")
-	public ResponseEntity<String> enviaEmail(@RequestBody String email) {
-		try {
-			emailComponent.enviarEmail(email);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return ResponseEntity.ok("Email enviado");
 	}
 }
