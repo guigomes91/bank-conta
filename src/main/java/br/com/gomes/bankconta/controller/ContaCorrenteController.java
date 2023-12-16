@@ -46,6 +46,7 @@ public class ContaCorrenteController {
 			@PathVariable long cc, 
 			@RequestParam(value = "dataInicio", required = true) LocalDate dataInicio,
 			@RequestParam(value = "dataTermino", required = true) LocalDate dataTermino) {
+		
 		return ResponseEntity.ok().build();
 	}
 	

@@ -1,13 +1,17 @@
 package br.com.gomes.bankconta.service.impl;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
+import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
@@ -53,6 +57,11 @@ public class ContaCorrenteService {
 		enviarEmailParaCliente(contaCorrenteEntity);
 		
 		return contaCorrenteEntity;
+	}
+	
+	@Transactional(readOnly = true)
+	public ResponseEntity<Page<ContaCorrenteOutputDTO>> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
+		return null;
 	}
 
 	private void enviarEmailParaCliente(ContaCorrenteEntity contaCorrenteEntity) {
