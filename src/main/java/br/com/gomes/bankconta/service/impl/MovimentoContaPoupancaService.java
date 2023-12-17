@@ -6,8 +6,16 @@ import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
 
-public interface Operacao {
+public class MovimentoContaPoupancaService implements Movimento {
 
-	void lancarMovimento(MovimentoInputDTO movimento);
-	List<MovimentoOutputDTO> consultarMovimento(Conta conta); 
+	@Override
+	public void lancarMovimento(MovimentoInputDTO movimento) {
+
+	}
+
+	@Override
+	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
+		return null;
+	}
+
 }
