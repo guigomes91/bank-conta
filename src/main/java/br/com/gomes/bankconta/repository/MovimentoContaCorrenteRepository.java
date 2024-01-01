@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
+import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
 
 @Repository
-public interface MovimentoContaCorrenteRepository extends JpaRepository<MovimentoEntity, UUID> {
+public interface MovimentoContaCorrenteRepository extends JpaRepository<MovimentoContaCorrenteEntity, UUID> {
 
 }
