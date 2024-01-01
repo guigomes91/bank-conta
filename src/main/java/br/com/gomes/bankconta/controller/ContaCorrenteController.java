@@ -29,7 +29,8 @@ public class ContaCorrenteController {
 	private ContaCorrenteService ccService;
 
 	@PostMapping
-	public ResponseEntity<ContaCorrenteOutputDTO> salvar(@RequestBody @Valid ContaCorrenteInputDTO ccDTO) {
+	public ResponseEntity<ContaCorrenteOutputDTO> salvar(
+			@RequestBody @Valid ContaCorrenteInputDTO ccDTO) {
 		ContaCorrenteEntity ccEntity = ccService.salvar(ccDTO);
 		
 		URI uri = ServletUriComponentsBuilder
