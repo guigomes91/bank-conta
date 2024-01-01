@@ -1,7 +1,6 @@
 package br.com.gomes.bankconta.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +15,9 @@ import jakarta.validation.Valid;
 public class MovimentoController {
 
 	@PostMapping(value = "lancar/{cc}")
-	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(@Valid @RequestBody MovimentoInputDTO mov,
-			@PathVariable long cc) {
+	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(
+			@Valid @RequestBody MovimentoInputDTO mov) {
+		
 		return ResponseEntity.ok().build();
 	}
 }
