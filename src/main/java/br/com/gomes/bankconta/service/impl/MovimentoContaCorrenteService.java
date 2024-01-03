@@ -26,7 +26,7 @@ public class MovimentoContaCorrenteService implements Movimento {
 
 	@Override
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
-		return null;
+		return movRepository.findAll();
 	}
 
 }
