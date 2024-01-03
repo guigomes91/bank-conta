@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Table(name = "movimento_conta_corrente")
 public class MovimentoContaCorrenteEntity extends MovimentoEntity {
 	
-	public MovimentoContaCorrenteEntity dtoToEntity(MovimentoInputDTO input) {
+	public static MovimentoContaCorrenteEntity dtoToEntity(MovimentoInputDTO input) {
 		MovimentoContaCorrenteEntity entity = new MovimentoContaCorrenteEntity();
 		entity.setConta(input.getConta());
 		entity.setDataHoraMovimento(input.getDataHoraMovimento());

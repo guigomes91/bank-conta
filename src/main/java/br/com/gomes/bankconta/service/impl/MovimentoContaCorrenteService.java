@@ -19,7 +19,7 @@ public class MovimentoContaCorrenteService implements Movimento {
 
 	@Override
 	public void lancarMovimento(MovimentoInputDTO movimento) {
-		MovimentoContaCorrenteEntity entity = new MovimentoContaCorrenteEntity().dtoToEntity(movimento);
+		MovimentoContaCorrenteEntity entity = MovimentoContaCorrenteEntity.dtoToEntity(movimento);
 		
 		movRepository.save(entity);
 	}
