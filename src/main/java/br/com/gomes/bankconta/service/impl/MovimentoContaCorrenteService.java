@@ -12,7 +12,7 @@ import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.MovimentoContaCorrenteRepository;
 
 @Service
-public class MovimentoContaCorrenteService implements Movimento {
+public class MovimentoContaCorrenteService implements Operacao {
 	
 	@Autowired
 	private MovimentoContaCorrenteRepository movRepository;
@@ -26,7 +26,7 @@ public class MovimentoContaCorrenteService implements Movimento {
 
 	@Override
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
-		return movRepository.findAll();
+		return MovimentoContaCorrenteEntity.listEntityToListDTO(movRepository.findAll());
 	}
 
 }

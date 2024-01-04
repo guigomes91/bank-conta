@@ -9,7 +9,7 @@ import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
 
 @Service
-public class MovimentoContaPoupancaService implements Movimento {
+public class MovimentoContaPoupancaService implements Operacao {
 
 	@Override
 	public void lancarMovimento(MovimentoInputDTO movimento) {

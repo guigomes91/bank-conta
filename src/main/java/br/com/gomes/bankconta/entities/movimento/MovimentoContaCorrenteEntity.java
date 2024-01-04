@@ -1,6 +1,10 @@
 package br.com.gomes.bankconta.entities.movimento;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
+import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -19,5 +23,22 @@ public class MovimentoContaCorrenteEntity extends MovimentoEntity {
 		entity.setValor(input.getValor());
 		
 		return entity;
+	}
+	
+	public static MovimentoOutputDTO entityToDTO(MovimentoContaCorrenteEntity input) {
+		MovimentoOutputDTO dto = new MovimentoOutputDTO();
+		
+		dto.setDataHoraMovimento(input.getDataHoraMovimento());
+		dto.setDescricao(input.getDescricao());
+		dto.setId(input.getId());
+		dto.setNumeroDocumento(input.getNumeroDocumento());
+		dto.setTipoMovimento(input.getTipoMovimento());
+		dto.setValor(input.getValor());
+		
+		return dto;
+	}
+	
+	public static List<MovimentoOutputDTO> listEntityToListDTO(List<MovimentoContaCorrenteEntity> inputs) {
+		return inputs.stream().map(MovimentoOutputDTO::entityToDto).collect(Collectors.toList());
 	}
 }
