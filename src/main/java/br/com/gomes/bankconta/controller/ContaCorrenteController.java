@@ -50,5 +50,4 @@ public class ContaCorrenteController {
 		
 		return ResponseEntity.ok().build();
 	}
-	
 }
