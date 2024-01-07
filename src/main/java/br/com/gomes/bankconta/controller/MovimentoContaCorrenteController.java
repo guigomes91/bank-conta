@@ -1,5 +1,6 @@
 package br.com.gomes.bankconta.controller;
 
+import java.net.URI;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
@@ -29,9 +31,15 @@ public class MovimentoContaCorrenteController {
 	@PostMapping(value = "lancar/{cc}")
 	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(
 			@Valid @RequestBody MovimentoInputDTO movDTO) {
-		movimentoService.lancarMovimento(TipoConta.CC, movDTO);
+		MovimentoOutputDTO movimentoOutput = movimentoService.lancarMovimento(TipoConta.CC, movDTO);
 		
-		return ResponseEntity.ok().build();
+		URI uri = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(movimentoOutput.getId())
+				.toUri();
+		
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@GetMapping(value = "/{cc}")
