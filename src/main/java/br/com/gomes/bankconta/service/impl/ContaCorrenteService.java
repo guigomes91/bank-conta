@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.service.impl;
 
 import java.time.LocalDate;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +58,10 @@ public class ContaCorrenteService {
 		enviarEmailParaCliente(contaCorrenteEntity);
 		
 		return contaCorrenteEntity;
+	}
+	
+	public ContaCorrenteEntity consultarPorId(UUID id) {
+		return ccValidator.contaExistente(id);
 	}
 	
 	@Transactional(readOnly = true)

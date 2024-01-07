@@ -1,6 +1,7 @@
 package br.com.gomes.bankconta.validators;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
+import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 
 @Component
 public class ContaCorrenteValidator {
@@ -29,5 +31,9 @@ public class ContaCorrenteValidator {
 		contaCorrenteEntity.ifPresent(cc -> {
 			throw new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
 		});
+	}
+	
+	public ContaCorrenteEntity contaExistente(UUID id) {
+		return ccRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta não cadastrada!"));
 	}
 }
