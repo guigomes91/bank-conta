@@ -12,8 +12,8 @@ import br.com.gomes.bankconta.entities.conta.Conta;
 public class MovimentoContaPoupancaService implements Operacao {
 
 	@Override
-	public void lancarMovimento(MovimentoInputDTO movimento) {
-
+	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
+		return null;
 	}
 
 	@Override

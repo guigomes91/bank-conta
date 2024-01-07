@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
-import br.com.gomes.bankconta.service.impl.MovimentoContaCorrenteService;
+import br.com.gomes.bankconta.enums.TipoConta;
 import br.com.gomes.bankconta.service.impl.MovimentoServiceImpl;
 import jakarta.validation.Valid;
 
@@ -24,15 +24,12 @@ import jakarta.validation.Valid;
 public class MovimentoContaCorrenteController {
 	
 	@Autowired
-	private MovimentoServiceImpl movImpl;
-	
-	@Autowired
-	private MovimentoContaCorrenteService movCC;
+	private MovimentoServiceImpl movimentoService;
 
 	@PostMapping(value = "lancar/{cc}")
 	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(
-			@Valid @RequestBody MovimentoInputDTO mov) {
-		movImpl.lancarMovimento(movCC, mov);
+			@Valid @RequestBody MovimentoInputDTO movDTO) {
+		movimentoService.lancarMovimento(TipoConta.CC, movDTO);
 		
 		return ResponseEntity.ok().build();
 	}

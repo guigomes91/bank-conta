@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.dto.movimento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.enums.TipoMovimento;
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovimentoInputDTO {
+	
+	private UUID id;
 	
 	private LocalDateTime dataHoraMovimento = LocalDateTime.now();
 	

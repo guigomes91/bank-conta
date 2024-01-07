@@ -8,6 +8,6 @@ import br.com.gomes.bankconta.entities.conta.Conta;
 
 public interface Operacao {
 
-	void lancarMovimento(MovimentoInputDTO movimento);
+	MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento);
 	List<MovimentoOutputDTO> consultarMovimento(Conta conta); 
 }

@@ -18,10 +18,10 @@ public class MovimentoContaCorrenteService implements Operacao {
 	private MovimentoContaCorrenteRepository movRepository;
 
 	@Override
-	public void lancarMovimento(MovimentoInputDTO movimento) {
+	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
 		MovimentoContaCorrenteEntity entity = MovimentoContaCorrenteEntity.dtoToEntity(movimento);
 		
-		movRepository.save(entity);
+		return MovimentoOutputDTO.entityToDto(movRepository.save(entity));
 	}
 
 	@Override
