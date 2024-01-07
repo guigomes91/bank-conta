@@ -28,7 +28,7 @@ public class MovimentoContaCorrenteController {
 	@Autowired
 	private MovimentoServiceImpl movimentoService;
 
-	@PostMapping(value = "lancar/{cc}")
+	@PostMapping(value = "lancar")
 	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(
 			@Valid @RequestBody MovimentoInputDTO movDTO) {
 		MovimentoOutputDTO movimentoOutput = movimentoService.lancarMovimento(TipoConta.CC, movDTO);

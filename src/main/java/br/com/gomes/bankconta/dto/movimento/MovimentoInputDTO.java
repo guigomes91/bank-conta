@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,5 +33,5 @@ public class MovimentoInputDTO {
 	
 	private TipoMovimento tipoMovimento;
 
-	private Conta conta;
+	private ContaCorrenteEntity conta;
 }

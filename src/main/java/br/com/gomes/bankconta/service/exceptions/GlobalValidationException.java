@@ -45,7 +45,8 @@ public class GlobalValidationException {
 
 	@ExceptionHandler(value = {
 			org.hibernate.exception.ConstraintViolationException.class,
-			org.springframework.dao.DataIntegrityViolationException.class
+			org.springframework.dao.DataIntegrityViolationException.class,
+			java.lang.NullPointerException.class
 			}
 	)
 	public ResponseEntity<ExceptionDTO> dataIntegrityViolationException(Exception ex, WebRequest req) {

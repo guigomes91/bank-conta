@@ -1,15 +1,16 @@
-package br.com.gomes.bankconta.service.impl;
+package br.com.gomes.bankconta.components;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.service.impl.Operacao;
 
-@Service
-public class MovimentoContaPoupancaService implements Operacao {
+@Component
+public class MovimentoContaPoupancaComponent implements Operacao {
 
 	@Override
 	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
