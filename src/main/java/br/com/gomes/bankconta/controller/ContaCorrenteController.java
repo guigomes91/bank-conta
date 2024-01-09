@@ -58,4 +58,9 @@ public class ContaCorrenteController {
 		
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping(value = "/saldo/{cc}")
+	public ResponseEntity<ContaCorrenteOutputDTO> visualizarSaldo(@PathVariable long cc) {
+		return ResponseEntity.ok().build();
+	}
 }

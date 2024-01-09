@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
@@ -17,6 +18,7 @@ public class ContaCorrenteValidator {
 	@Autowired
 	private ContaCorrenteRepository ccRepository;
 	
+	@Transactional(readOnly = true)
 	public void verificaContaAgenciaExistente(ContaCorrenteEntity ccEntity) {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
 		
@@ -25,6 +27,7 @@ public class ContaCorrenteValidator {
 		});
 	}
 	
+	@Transactional(readOnly = true)
 	public void verificaClienteJaTemContaCorrente(ContaCorrenteEntity ccEntity) {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByCliente(ccEntity.getCliente());
 		
@@ -33,6 +36,7 @@ public class ContaCorrenteValidator {
 		});
 	}
 	
+	@Transactional(readOnly = true)
 	public ContaCorrenteEntity contaExistente(UUID id) {
 		return ccRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta não cadastrada!"));
 	}
