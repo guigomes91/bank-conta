@@ -29,6 +29,7 @@ public class MovimentoServiceImpl {
 		return operacao.lancarMovimento(movimento);
 	}
 	
+	@Transactional(readOnly = true)
 	public void consultarMovimento(Operacao operacao, Conta conta) {
 		operacao.consultarMovimento(conta);
 	}
