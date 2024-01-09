@@ -1,12 +1,12 @@
 package br.com.gomes.bankconta.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +16,13 @@ import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
+import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
+import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
 import br.com.gomes.bankconta.validators.ContaCorrenteValidator;
 
 @Service
 public class ContaCorrenteService {
-
-	private static final int NUMERO_AGENCIA = 2023;
-	private static final int MIN_CONTAS = 1;
-	private static final int MAX_CONTAS = 200000000;
 
 	@Autowired
 	private ContaCorrenteRepository ccRepository;
@@ -46,8 +44,8 @@ public class ContaCorrenteService {
 		ccValidator.verificaClienteJaTemContaCorrente(contaCorrenteEntity);
 		
 		Random random = new Random();
-		int numeroConta = random.nextInt(MAX_CONTAS - MIN_CONTAS) + MIN_CONTAS;
-		int agencia = NUMERO_AGENCIA;
+		int numeroConta = random.nextInt(BankGomesConstantes.MAX_CONTAS - BankGomesConstantes.MIN_CONTAS) + BankGomesConstantes.MIN_CONTAS;
+		int agencia = BankGomesConstantes.NUMERO_AGENCIA;
 		
 		contaCorrenteEntity.setNumeroConta(numeroConta);
 		contaCorrenteEntity.setAgencia(agencia);
@@ -60,12 +58,23 @@ public class ContaCorrenteService {
 		return contaCorrenteEntity;
 	}
 	
+	@Transactional(readOnly = true)
+	public BigDecimal getSaldo(int cc) {
+		ContaCorrenteEntity contaCorrenteEntity = ccRepository
+				.findByNumeroConta(cc)
+				.orElseThrow(
+						() -> new DataIntegrityViolationException("Conta corrente não encontrada")
+						);
+		
+		return contaCorrenteEntity.getSaldo();
+	}
+	
 	public ContaCorrenteEntity consultarPorId(UUID id) {
 		return ccValidator.contaExistente(id);
 	}
 	
 	@Transactional(readOnly = true)
-	public ResponseEntity<Page<ContaCorrenteOutputDTO>> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
+	public Page<ContaCorrenteOutputDTO> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
 		return null;
 	}
 

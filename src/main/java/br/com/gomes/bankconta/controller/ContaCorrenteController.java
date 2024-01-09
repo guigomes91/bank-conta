@@ -1,5 +1,6 @@
 package br.com.gomes.bankconta.controller;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -60,7 +61,8 @@ public class ContaCorrenteController {
 	}
 	
 	@GetMapping(value = "/saldo/{cc}")
-	public ResponseEntity<ContaCorrenteOutputDTO> visualizarSaldo(@PathVariable long cc) {
-		return ResponseEntity.ok().build();
+	public ResponseEntity<BigDecimal> visualizarSaldo(@PathVariable int cc) {
+		BigDecimal saldo = ccService.getSaldo(cc);
+		return ResponseEntity.ok(saldo);
 	}
 }
