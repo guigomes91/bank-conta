@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
+import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.service.impl.ContaCorrenteService;
 import jakarta.validation.Valid;
@@ -61,8 +62,9 @@ public class ContaCorrenteController {
 	}
 	
 	@GetMapping(value = "/saldo/{cc}")
-	public ResponseEntity<BigDecimal> visualizarSaldo(@PathVariable int cc) {
-		BigDecimal saldo = ccService.getSaldo(cc);
-		return ResponseEntity.ok(saldo);
+	public ResponseEntity<SaldoDTO> visualizarSaldo(@PathVariable int cc) {
+		SaldoDTO saldoDTO = ccService.getSaldo(cc);
+		
+		return ResponseEntity.ok(saldoDTO);
 	}
 }

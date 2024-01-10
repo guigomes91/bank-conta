@@ -1,6 +1,5 @@
 package br.com.gomes.bankconta.service.impl;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.UUID;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
+import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
@@ -59,14 +59,14 @@ public class ContaCorrenteService {
 	}
 	
 	@Transactional(readOnly = true)
-	public BigDecimal getSaldo(int cc) {
+	public SaldoDTO getSaldo(int cc) {
 		ContaCorrenteEntity contaCorrenteEntity = ccRepository
 				.findByNumeroConta(cc)
 				.orElseThrow(
 						() -> new DataIntegrityViolationException("Conta corrente não encontrada")
 						);
 		
-		return contaCorrenteEntity.getSaldo();
+		return new SaldoDTO(Long.valueOf(contaCorrenteEntity.getNumeroConta()), contaCorrenteEntity.getSaldo());
 	}
 	
 	public ContaCorrenteEntity consultarPorId(UUID id) {
