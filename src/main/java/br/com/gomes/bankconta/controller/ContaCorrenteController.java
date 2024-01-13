@@ -1,6 +1,5 @@
 package br.com.gomes.bankconta.controller;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.UUID;
