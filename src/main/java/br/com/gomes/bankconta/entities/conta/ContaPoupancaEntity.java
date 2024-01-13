@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,4 +24,8 @@ public class ContaPoupancaEntity extends Conta {
 	@JsonIgnore
 	@OneToMany(mappedBy = "conta")
 	private List<MovimentoEntity> movimentos = new ArrayList<>();
+
+	public ContaPoupancaEntity dtoToEntity(ContaPoupancaInputDTO ccDTO) {
+		return null;
+	}
 }

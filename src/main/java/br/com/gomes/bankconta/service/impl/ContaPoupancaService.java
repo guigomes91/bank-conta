@@ -12,10 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
+import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
+import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
+import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
+import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
@@ -25,7 +30,7 @@ import br.com.gomes.bankconta.validators.ContaCorrenteValidator;
 public class ContaPoupancaService {
 
 	@Autowired
-	private ContaCorrenteRepository ccRepository;
+	private ContaPoupancaRepository cpRepository;
 	
 	@Autowired
 	private EnviaEmailComponent emailComponente;
@@ -37,48 +42,44 @@ public class ContaPoupancaService {
 	private ClienteValidator clienteValidator;
 	
 	@Transactional
-	public ContaCorrenteEntity salvar(ContaCorrenteInputDTO ccDTO) {
+	public ContaPoupancaEntity salvar(ContaPoupancaInputDTO ccDTO) {
 		clienteValidator.verificaPerfilAdmin(ccDTO.getCliente().getId());
-		ContaCorrenteEntity contaCorrenteEntity = new ContaCorrenteEntity().dtoToEntity(ccDTO);
+		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(ccDTO);
 		
-		ccValidator.verificaClienteJaTemContaCorrente(contaCorrenteEntity);
+		ccValidator.verificaClienteJaTemContaCorrente(contaPoupancaEntity);
 		
-		Random random = new Random();
-		int numeroConta = random.nextInt(BankGomesConstantes.MAX_CONTAS - BankGomesConstantes.MIN_CONTAS) + BankGomesConstantes.MIN_CONTAS;
-		int agencia = BankGomesConstantes.NUMERO_AGENCIA;
+		contaPoupancaEntity.setVariacao(BankGomesConstantes.VARIACAO_POUPANCA);
 		
-		contaCorrenteEntity.setNumeroConta(numeroConta);
-		contaCorrenteEntity.setAgencia(agencia);
+		ccValidator.verificaContaAgenciaExistente(contaPoupancaEntity);
 		
-		ccValidator.verificaContaAgenciaExistente(contaCorrenteEntity);
+		contaPoupancaEntity = cpRepository.save(contaPoupancaEntity);
+		enviarEmailParaCliente(contaPoupancaEntity);
 		
-		contaCorrenteEntity = ccRepository.save(contaCorrenteEntity);
-		enviarEmailParaCliente(contaCorrenteEntity);
-		
-		return contaCorrenteEntity;
+		return contaPoupancaEntity;
 	}
 	
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(int cc) {
-		ContaCorrenteEntity contaCorrenteEntity = ccRepository
+		ContaPoupancaEntity contaCorrenteEntity = cpRepository
 				.findByNumeroConta(cc)
 				.orElseThrow(
-						() -> new DataIntegrityViolationException("Conta corrente não encontrada")
+						() -> new DataIntegrityViolationException("Conta poupança não encontrada")
 						);
 		
 		return new SaldoDTO(Long.valueOf(contaCorrenteEntity.getNumeroConta()), contaCorrenteEntity.getSaldo());
 	}
 	
-	public ContaCorrenteEntity consultarPorId(UUID id) {
-		return ccValidator.contaExistente(id);
+	public ContaPoupancaEntity consultarPorId(UUID id) {
+		//return ccValidator.contaExistente(id);
+		return null;
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<ContaCorrenteOutputDTO> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
+	public Page<ContaPoupancaOutputDTO> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
 		return null;
 	}
 
-	private void enviarEmailParaCliente(ContaCorrenteEntity contaCorrenteEntity) {
+	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
 		ClienteEntity clienteEntity = clienteValidator
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
 		emailComponente.enviarEmail(clienteEntity.getEmail());

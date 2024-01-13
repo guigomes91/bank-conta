@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
@@ -19,7 +20,7 @@ public class ContaCorrenteValidator {
 	private ContaCorrenteRepository ccRepository;
 	
 	@Transactional(readOnly = true)
-	public void verificaContaAgenciaExistente(ContaCorrenteEntity ccEntity) {
+	public void verificaContaAgenciaExistente(Conta ccEntity) {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
@@ -28,7 +29,7 @@ public class ContaCorrenteValidator {
 	}
 	
 	@Transactional(readOnly = true)
-	public void verificaClienteJaTemContaCorrente(ContaCorrenteEntity ccEntity) {
+	public void verificaClienteJaTemContaCorrente(Conta ccEntity) {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByCliente(ccEntity.getCliente());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
