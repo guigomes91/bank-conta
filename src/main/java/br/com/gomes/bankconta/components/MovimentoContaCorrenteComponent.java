@@ -12,7 +12,7 @@ import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
 import br.com.gomes.bankconta.repository.MovimentoContaCorrenteRepository;
 import br.com.gomes.bankconta.service.impl.Operacao;
-import br.com.gomes.bankconta.validators.ContaCorrenteValidator;
+import br.com.gomes.bankconta.validators.ContaValidator;
 import br.com.gomes.bankconta.validators.SaldoContaCorrenteValidator;
 
 @Component
@@ -22,14 +22,14 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 	private MovimentoContaCorrenteRepository movRepository;
 	
 	@Autowired
-	private ContaCorrenteValidator ccValidator;
+	private ContaValidator ccValidator;
 	
 	@Autowired
 	private SaldoContaCorrenteValidator saldoValidator;
 
 	@Override
 	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
-		ContaCorrenteEntity contaCorrenteEntity = ccValidator.contaExistente(movimento.getConta().getId());
+		ContaCorrenteEntity contaCorrenteEntity = ccValidator.contaCorrenteExistente(movimento.getConta().getId());
 		MovimentoContaCorrenteEntity entity = MovimentoContaCorrenteEntity.dtoToEntity(movimento);
 		
 		MovimentoOutputDTO movimentoOutputDTO = MovimentoOutputDTO.entityToDto(movRepository.save(entity));

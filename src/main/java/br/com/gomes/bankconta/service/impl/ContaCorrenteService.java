@@ -19,7 +19,7 @@ import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
-import br.com.gomes.bankconta.validators.ContaCorrenteValidator;
+import br.com.gomes.bankconta.validators.ContaValidator;
 
 @Service
 public class ContaCorrenteService {
@@ -31,7 +31,7 @@ public class ContaCorrenteService {
 	private EnviaEmailComponent emailComponente;
 	
 	@Autowired
-	private ContaCorrenteValidator ccValidator;
+	private ContaValidator ccValidator;
 	
 	@Autowired
 	private ClienteValidator clienteValidator;
@@ -70,7 +70,7 @@ public class ContaCorrenteService {
 	}
 	
 	public ContaCorrenteEntity consultarPorId(UUID id) {
-		return ccValidator.contaExistente(id);
+		return ccValidator.contaCorrenteExistente(id);
 	}
 	
 	@Transactional(readOnly = true)

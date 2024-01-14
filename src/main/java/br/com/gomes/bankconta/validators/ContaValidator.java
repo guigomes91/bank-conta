@@ -9,15 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
+import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
+import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 
 @Component
-public class ContaCorrenteValidator {
+public class ContaValidator {
 
 	@Autowired
 	private ContaCorrenteRepository ccRepository;
+	
+	@Autowired
+	private ContaPoupancaRepository cpRepository;
 	
 	@Transactional(readOnly = true)
 	public void verificaContaAgenciaExistente(Conta ccEntity) {
@@ -38,7 +43,12 @@ public class ContaCorrenteValidator {
 	}
 	
 	@Transactional(readOnly = true)
-	public ContaCorrenteEntity contaExistente(UUID id) {
-		return ccRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta não cadastrada!"));
+	public ContaCorrenteEntity contaCorrenteExistente(UUID id) {
+		return ccRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta corrente não cadastrada!"));
+	}
+	
+	@Transactional(readOnly = true)
+	public ContaPoupancaEntity contaPoupancaExistente(UUID id) {
+		return cpRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
 	}
 }

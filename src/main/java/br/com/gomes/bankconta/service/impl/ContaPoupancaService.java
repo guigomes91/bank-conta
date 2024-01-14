@@ -1,7 +1,6 @@
 package br.com.gomes.bankconta.service.impl;
 
 import java.time.LocalDate;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
-import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
-import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.Conta;
-import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
-import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
-import br.com.gomes.bankconta.validators.ContaCorrenteValidator;
+import br.com.gomes.bankconta.validators.ContaValidator;
 
 @Service
 public class ContaPoupancaService {
@@ -36,7 +31,7 @@ public class ContaPoupancaService {
 	private EnviaEmailComponent emailComponente;
 	
 	@Autowired
-	private ContaCorrenteValidator ccValidator;
+	private ContaValidator contaValidator;
 	
 	@Autowired
 	private ClienteValidator clienteValidator;
@@ -46,11 +41,9 @@ public class ContaPoupancaService {
 		clienteValidator.verificaPerfilAdmin(ccDTO.getCliente().getId());
 		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(ccDTO);
 		
-		ccValidator.verificaClienteJaTemContaCorrente(contaPoupancaEntity);
-		
+		contaValidator.verificaClienteJaTemContaCorrente(contaPoupancaEntity);
 		contaPoupancaEntity.setVariacao(BankGomesConstantes.VARIACAO_POUPANCA);
-		
-		ccValidator.verificaContaAgenciaExistente(contaPoupancaEntity);
+		contaValidator.verificaContaAgenciaExistente(contaPoupancaEntity);
 		
 		contaPoupancaEntity = cpRepository.save(contaPoupancaEntity);
 		enviarEmailParaCliente(contaPoupancaEntity);
@@ -60,18 +53,17 @@ public class ContaPoupancaService {
 	
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(int cc) {
-		ContaPoupancaEntity contaCorrenteEntity = cpRepository
+		ContaPoupancaEntity contaPoupancaEntity = cpRepository
 				.findByNumeroConta(cc)
 				.orElseThrow(
 						() -> new DataIntegrityViolationException("Conta poupança não encontrada")
 						);
 		
-		return new SaldoDTO(Long.valueOf(contaCorrenteEntity.getNumeroConta()), contaCorrenteEntity.getSaldo());
+		return new SaldoDTO(Long.valueOf(contaPoupancaEntity.getNumeroConta()), contaPoupancaEntity.getSaldo());
 	}
 	
 	public ContaPoupancaEntity consultarPorId(UUID id) {
-		//return ccValidator.contaExistente(id);
-		return null;
+		return contaValidator.contaPoupancaExistente(id);
 	}
 	
 	@Transactional(readOnly = true)
