@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
@@ -81,6 +82,6 @@ public class ContaCorrenteService {
 	private void enviarEmailParaCliente(ContaCorrenteEntity contaCorrenteEntity) {
 		ClienteEntity clienteEntity = clienteValidator
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
-		emailComponente.enviarEmail(clienteEntity.getEmail(), "Conta corrente criada em Gomes Bank", "Parabéns, você acaba de adquirir uma vida sem complicações!");
+		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta corrente criada em Gomes Bank", "Parabéns, você acaba de adquirir uma vida sem complicações!");
 	}
 }

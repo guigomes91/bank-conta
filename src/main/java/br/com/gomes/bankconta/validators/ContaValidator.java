@@ -19,14 +19,14 @@ import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 public class ContaValidator {
 
 	@Autowired
-	private ContaCorrenteRepository ccRepository;
+	private ContaCorrenteRepository contaCorrenteRepository;
 	
 	@Autowired
-	private ContaPoupancaRepository cpRepository;
+	private ContaPoupancaRepository contaPoupancaRepository;
 	
 	@Transactional(readOnly = true)
 	public void verificaContaAgenciaExistente(Conta ccEntity) {
-		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
+		Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
 			new DataIntegrityViolationException("Conta já existe!");
@@ -34,21 +34,27 @@ public class ContaValidator {
 	}
 	
 	@Transactional(readOnly = true)
-	public void verificaClienteJaTemContaCorrente(Conta ccEntity) {
-		Optional<ContaCorrenteEntity> contaCorrenteEntity = ccRepository.findByCliente(ccEntity.getCliente());
-		
-		contaCorrenteEntity.ifPresent(cc -> {
-			throw new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
-		});
+	public void verificaClienteJaTemContaCorrente(Conta contaEntity) {
+		if (contaEntity instanceof ContaPoupancaEntity) {
+			Optional<ContaPoupancaEntity> contaPoupancaEntity = contaPoupancaRepository.findByCliente(contaEntity.getCliente());
+			contaPoupancaEntity.ifPresent(contaPoupanca -> {
+				throw new DataIntegrityViolationException("Cliente já possui conta poupança aberta!");
+			});
+		} else {
+			Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository.findByCliente(contaEntity.getCliente());
+			contaCorrenteEntity.ifPresent(cc -> {
+				throw new DataIntegrityViolationException("Cliente já possui conta corrente aberta!");
+			});
+		}
 	}
 	
 	@Transactional(readOnly = true)
 	public ContaCorrenteEntity contaCorrenteExistente(UUID id) {
-		return ccRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta corrente não cadastrada!"));
+		return contaCorrenteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta corrente não cadastrada!"));
 	}
 	
 	@Transactional(readOnly = true)
 	public ContaPoupancaEntity contaPoupancaExistente(UUID id) {
-		return cpRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
+		return contaPoupancaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
 	}
 }

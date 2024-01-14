@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
+import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
+import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
+import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
 import br.com.gomes.bankconta.validators.ContaValidator;
@@ -25,7 +29,10 @@ import br.com.gomes.bankconta.validators.ContaValidator;
 public class ContaPoupancaService {
 
 	@Autowired
-	private ContaPoupancaRepository cpRepository;
+	private ContaPoupancaRepository contaPoupancaRepository;
+	
+	@Autowired
+	private ContaCorrenteRepository contaCorrenteRepository;
 	
 	@Autowired
 	private EnviaEmailComponent emailComponente;
@@ -37,15 +44,19 @@ public class ContaPoupancaService {
 	private ClienteValidator clienteValidator;
 	
 	@Transactional
-	public ContaPoupancaEntity salvar(ContaPoupancaInputDTO ccDTO) {
-		clienteValidator.verificaPerfilAdmin(ccDTO.getCliente().getId());
-		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(ccDTO);
+	public ContaPoupancaEntity salvar(ContaPoupancaInputDTO contaPoupancaDTO) {
+		clienteValidator.verificaPerfilAdmin(contaPoupancaDTO.getCliente().getId());
+		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(contaPoupancaDTO);
 		
 		contaValidator.verificaClienteJaTemContaCorrente(contaPoupancaEntity);
 		contaPoupancaEntity.setVariacao(BankGomesConstantes.VARIACAO_POUPANCA);
 		contaValidator.verificaContaAgenciaExistente(contaPoupancaEntity);
 		
-		contaPoupancaEntity = cpRepository.save(contaPoupancaEntity);
+		ContaCorrenteEntity contaCorrenteEntity = contaCorrenteRepository.findByCliente(contaPoupancaDTO.getCliente()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado!"));
+		contaPoupancaEntity.setAgencia(contaCorrenteEntity.getAgencia());
+		contaPoupancaEntity.setNumeroConta(contaCorrenteEntity.getNumeroConta());
+		
+		contaPoupancaEntity = contaPoupancaRepository.save(contaPoupancaEntity);
 		enviarEmailParaCliente(contaPoupancaEntity);
 		
 		return contaPoupancaEntity;
@@ -53,7 +64,7 @@ public class ContaPoupancaService {
 	
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(int cc) {
-		ContaPoupancaEntity contaPoupancaEntity = cpRepository
+		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository
 				.findByNumeroConta(cc)
 				.orElseThrow(
 						() -> new DataIntegrityViolationException("Conta poupança não encontrada")
@@ -74,6 +85,6 @@ public class ContaPoupancaService {
 	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
 		ClienteEntity clienteEntity = clienteValidator
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
-		emailComponente.enviarEmail(clienteEntity.getEmail(), "Conta poupança criada em Gomes Bank", "Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");
+		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank", "Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");
 	}
 }

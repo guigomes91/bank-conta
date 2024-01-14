@@ -25,7 +25,16 @@ public class ContaPoupancaEntity extends Conta {
 	@OneToMany(mappedBy = "conta")
 	private List<MovimentoEntity> movimentos = new ArrayList<>();
 
-	public ContaPoupancaEntity dtoToEntity(ContaPoupancaInputDTO ccDTO) {
-		return null;
+	public ContaPoupancaEntity dtoToEntity(ContaPoupancaInputDTO contaPoupancaInputDTO) {
+		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity();
+		contaPoupancaEntity.setId(contaPoupancaInputDTO.getId());
+		contaPoupancaEntity.setAgencia(contaPoupancaInputDTO.getAgencia());
+		contaPoupancaEntity.setCliente(contaPoupancaInputDTO.getCliente());
+		contaPoupancaEntity.setNumeroConta(contaPoupancaInputDTO.getNumeroConta());
+		contaPoupancaEntity.setSaldo(contaPoupancaInputDTO.getSaldo());
+		contaPoupancaEntity.setTipoConta(contaPoupancaInputDTO.getTipoConta());
+		contaPoupancaEntity.setVariacao(contaPoupancaInputDTO.getVariacao());
+		
+		return contaPoupancaEntity;
 	}
 }

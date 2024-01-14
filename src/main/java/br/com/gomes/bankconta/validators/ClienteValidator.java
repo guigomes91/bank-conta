@@ -66,11 +66,13 @@ public class ClienteValidator {
 		}
 	}
 	
-	public void verificaPerfilAdmin(UUID idCliente) {
+	public ClienteEntity verificaPerfilAdmin(UUID idCliente) {
 		ClienteEntity clienteEntity = this.verificaClienteExistente(idCliente);
 		
 		if (!clienteEntity.getPerfis().contains(Perfil.ADMIN)) {
 			throw new BadRequestException("Você não tem permissão para essa operação!");
 		}
+		
+		return clienteEntity;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.TipoConta;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,10 +28,8 @@ public abstract class Conta {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	
-	@Column(unique = true)
 	private int numeroConta;
 	
-	@Column(unique = true)
 	private int agencia;
 	
 	@ManyToOne
