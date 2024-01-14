@@ -81,6 +81,6 @@ public class ContaCorrenteService {
 	private void enviarEmailParaCliente(ContaCorrenteEntity contaCorrenteEntity) {
 		ClienteEntity clienteEntity = clienteValidator
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
-		emailComponente.enviarEmail(clienteEntity.getEmail());
+		emailComponente.enviarEmail(clienteEntity.getEmail(), "Conta corrente criada em Gomes Bank", "Parabéns, você acaba de adquirir uma vida sem complicações!");
 	}
 }

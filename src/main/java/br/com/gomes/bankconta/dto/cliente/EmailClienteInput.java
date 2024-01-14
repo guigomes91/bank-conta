@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class EmailClienteInput {
 
 	private String email;
+	private String assunto;
+	private String mensagem;
 }
