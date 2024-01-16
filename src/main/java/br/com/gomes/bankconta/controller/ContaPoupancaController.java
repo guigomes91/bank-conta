@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
+import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.service.impl.ContaPoupancaService;
 import jakarta.validation.Valid;
@@ -45,5 +46,12 @@ public class ContaPoupancaController {
 		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaService.consultarPorId(id);
 
 		return ResponseEntity.ok(new ContaPoupancaOutputDTO(contaPoupancaEntity));
+	}
+	
+	@GetMapping(value = "/saldo/{cc}")
+	public ResponseEntity<SaldoDTO> visualizarSaldo(@PathVariable int cc) {
+		SaldoDTO saldoDTO = contaPoupancaService.getSaldo(cc);
+		
+		return ResponseEntity.ok(saldoDTO);
 	}
 }
