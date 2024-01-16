@@ -57,4 +57,9 @@ public class ContaValidator {
 	public ContaPoupancaEntity contaPoupancaExistente(UUID id) {
 		return contaPoupancaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
 	}
+	
+	@Transactional(readOnly = true)
+	public ContaPoupancaEntity contaPoupanca(UUID id) {
+		return contaPoupancaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
+	}
 }
