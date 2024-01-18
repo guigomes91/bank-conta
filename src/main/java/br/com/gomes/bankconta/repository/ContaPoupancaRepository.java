@@ -18,5 +18,5 @@ public interface ContaPoupancaRepository extends JpaRepository<ContaPoupancaEnti
 	Optional<ContaPoupancaEntity> findByNumeroConta(int numeroConta);
 	Optional<ContaPoupancaEntity> findByCliente(ClienteEntity cliente);
 	
-	Page<ContaPoupancaEntity> findByDataCriacaoBetween(LocalDate dataInicio, LocalDate dataTermino);
+	Page<ContaPoupancaEntity> findByNumeroContaAndAgenciaAndVariacaoAndDataCriacaoBetween(LocalDate dataInicio, LocalDate dataTermino);
 }

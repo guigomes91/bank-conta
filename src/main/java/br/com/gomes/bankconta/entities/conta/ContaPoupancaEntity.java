@@ -3,10 +3,14 @@ package br.com.gomes.bankconta.entities.conta;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
+import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
+import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -36,5 +40,9 @@ public class ContaPoupancaEntity extends Conta {
 		contaPoupancaEntity.setVariacao(contaPoupancaInputDTO.getVariacao());
 		
 		return contaPoupancaEntity;
+	}
+
+	public static Page<ContaPoupancaOutputDTO> entityPageToOutputDTO(Page<ContaPoupancaEntity> contaPoupancaEntity) {
+		return contaPoupancaEntity.map(contaEntity -> new ContaPoupancaOutputDTO(contaEntity));
 	}
 }

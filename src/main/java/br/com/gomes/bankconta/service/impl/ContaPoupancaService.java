@@ -79,7 +79,10 @@ public class ContaPoupancaService {
 	
 	@Transactional(readOnly = true)
 	public Page<ContaPoupancaOutputDTO> extrato(long cc, LocalDate dataInicio, LocalDate dataTermino) {
-		return null;
+		Page<ContaPoupancaEntity> contaPoupancaEntity = contaPoupancaRepository
+				.findByNumeroContaAndAgenciaAndVariacaoAndDataCriacaoBetween(dataInicio, dataTermino);
+		
+		return ContaPoupancaEntity.entityPageToOutputDTO(contaPoupancaEntity);
 	}
 
 	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
