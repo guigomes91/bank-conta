@@ -83,8 +83,9 @@ public class ContaPoupancaService {
 	}
 
 	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
-		ClienteEntity clienteEntity = clienteValidator
+		ClienteEntity clienteEntity = clienteValidator//
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
-		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank", "Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");
+		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank",//
+				"Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");
 	}
 }

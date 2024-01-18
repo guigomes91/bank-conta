@@ -1,8 +1,10 @@
 package br.com.gomes.bankconta.repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,6 @@ public interface ContaPoupancaRepository extends JpaRepository<ContaPoupancaEnti
 	Optional<ContaPoupancaEntity> findByNumeroContaAndAgenciaAndVariacao(int numeroConta, int agencia, int variacao);
 	Optional<ContaPoupancaEntity> findByNumeroConta(int numeroConta);
 	Optional<ContaPoupancaEntity> findByCliente(ClienteEntity cliente);
+	
+	Page<ContaPoupancaEntity> findByDataCriacaoBetween(LocalDate dataInicio, LocalDate dataTermino);
 }
