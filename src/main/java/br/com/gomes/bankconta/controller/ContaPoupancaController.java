@@ -1,15 +1,18 @@
 package br.com.gomes.bankconta.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -53,5 +56,22 @@ public class ContaPoupancaController {
 		SaldoDTO saldoDTO = contaPoupancaService.getSaldo(cc);
 		
 		return ResponseEntity.ok(saldoDTO);
+	}
+	
+	@GetMapping(value = "/extrato/{cc}")
+	public ResponseEntity<Page<ContaPoupancaOutputDTO>> extrato(
+			@PathVariable long contaPoupanca, 
+			@RequestParam(value = "dataInicio", required = true) LocalDate dataInicio,
+			@RequestParam(value = "dataTermino", required = true) LocalDate dataTermino,
+			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		
+		Page<ContaPoupancaOutputDTO> extratoOutput = contaPoupancaService.extrato(
+				contaPoupanca, 
+				dataInicio, 
+				dataTermino, 
+				page, 
+				size);
+		return ResponseEntity.ok(extratoOutput);
 	}
 }
