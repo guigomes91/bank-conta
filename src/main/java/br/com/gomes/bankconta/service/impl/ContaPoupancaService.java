@@ -93,6 +93,7 @@ public class ContaPoupancaService {
 				.findByNumeroContaAndAgenciaAndVariacaoAndDataCriacaoBetween(
 						numeroConta,
 						BankGomesConstantes.NUMERO_AGENCIA,
+						BankGomesConstantes.VARIACAO_POUPANCA,
 						dataInicio, 
 						dataTermino, 
 						pageRequest);
