@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContaCorrenteEntity extends Conta {
+public class ContaCorrenteEntity extends ContaEntity {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "conta")

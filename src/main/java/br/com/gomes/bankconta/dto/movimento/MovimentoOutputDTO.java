@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
+import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class MovimentoOutputDTO {
 	
 	private TipoMovimento tipoMovimento;
 	
-	public static MovimentoOutputDTO entityToDto(MovimentoContaCorrenteEntity entity) {
+	public static MovimentoOutputDTO entityToDto(MovimentoEntity entity) {
 		MovimentoOutputDTO dto = new MovimentoOutputDTO();
 		dto.setId(entity.getId());
 		dto.setDataHoraMovimento(entity.getDataHoraMovimento());

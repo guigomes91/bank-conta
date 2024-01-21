@@ -1,7 +1,6 @@
 package br.com.gomes.bankconta.controller;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
+import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
+import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
 import br.com.gomes.bankconta.service.impl.ContaPoupancaService;
 import jakarta.validation.Valid;
 
@@ -51,27 +52,24 @@ public class ContaPoupancaController {
 		return ResponseEntity.ok(new ContaPoupancaOutputDTO(contaPoupancaEntity));
 	}
 	
-	@GetMapping(value = "/saldo/{cc}")
-	public ResponseEntity<SaldoDTO> visualizarSaldo(@PathVariable int cc) {
-		SaldoDTO saldoDTO = contaPoupancaService.getSaldo(cc);
+	@GetMapping(value = "/saldo/{numeroConta}")
+	public ResponseEntity<SaldoDTO> visualizarSaldo(@PathVariable Long numeroConta) {
+		SaldoDTO saldoDTO = contaPoupancaService.getSaldo(numeroConta);
 		
 		return ResponseEntity.ok(saldoDTO);
 	}
 	
-	@GetMapping(value = "/extrato/{cc}")
-	public ResponseEntity<Page<ContaPoupancaOutputDTO>> extrato(
-			@PathVariable long contaPoupanca, 
-			@RequestParam(value = "dataInicio", required = true) LocalDate dataInicio,
-			@RequestParam(value = "dataTermino", required = true) LocalDate dataTermino,
+	@GetMapping(value = "/extrato/{numeroConta}")
+	public ResponseEntity<Page<MovimentoOutputDTO>> extrato(
+			@PathVariable Long numeroConta, 
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
 		
-		Page<ContaPoupancaOutputDTO> extratoOutput = contaPoupancaService.extrato(
-				contaPoupanca, 
-				dataInicio, 
-				dataTermino, 
+		Page<MovimentoContaPoupancaEntity> movimentosEntity = contaPoupancaService.extrato(
+				numeroConta, 
 				page, 
 				size);
-		return ResponseEntity.ok(extratoOutput);
+		
+		return ResponseEntity.ok(movimentosEntity.map(MovimentoOutputDTO::entityToDto));
 	}
 }

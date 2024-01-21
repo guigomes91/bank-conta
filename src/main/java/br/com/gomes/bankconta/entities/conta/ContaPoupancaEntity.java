@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
-import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -20,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ContaPoupancaEntity extends Conta {
+public class ContaPoupancaEntity extends ContaEntity {
 	
 	@Column(name = "variacao")
 	private int variacao;

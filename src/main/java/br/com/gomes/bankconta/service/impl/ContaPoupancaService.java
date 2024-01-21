@@ -1,10 +1,10 @@
 package br.com.gomes.bankconta.service.impl;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,14 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
-import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
-import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
+import br.com.gomes.bankconta.entities.conta.ContaEntity;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
+import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
+import br.com.gomes.bankconta.repository.MovimentoContaPoupancaRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
@@ -35,6 +36,9 @@ public class ContaPoupancaService {
 
 	@Autowired
 	private ContaCorrenteRepository contaCorrenteRepository;
+	
+	@Autowired
+	private MovimentoContaPoupancaRepository movimentoContaPoupancaRepository;
 
 	@Autowired
 	private EnviaEmailComponent emailComponente;
@@ -67,9 +71,9 @@ public class ContaPoupancaService {
 	}
 
 	@Transactional(readOnly = true)
-	public SaldoDTO getSaldo(int cc) {
+	public SaldoDTO getSaldo(Long numeroConta) {
 		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository//
-				.findByNumeroConta(cc)//
+				.findByNumeroConta(numeroConta)//
 				.orElseThrow(//
 						() -> new DataIntegrityViolationException("Conta poupança não encontrada")//
 				);
@@ -82,26 +86,19 @@ public class ContaPoupancaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ContaPoupancaOutputDTO> extrato(
-			long numeroConta, 
-			LocalDate dataInicio, 
-			LocalDate dataTermino,
+	public Page<MovimentoContaPoupancaEntity> extrato(
+			long numeroConta,
 			int page,
 			int size) {
-		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataCriacao");
-		var contaPoupancaEntities = contaPoupancaRepository//
-				.findByNumeroContaAndAgenciaAndVariacaoAndDataCriacaoBetween(
-						numeroConta,
-						BankGomesConstantes.NUMERO_AGENCIA,
-						BankGomesConstantes.VARIACAO_POUPANCA,
-						dataInicio, 
-						dataTermino, 
-						pageRequest);
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataHoraMovimento");
+		
+		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository.findByNumeroConta(numeroConta).orElseThrow();
 
-		return ContaPoupancaEntity.entityPageToOutputDTO(contaPoupancaEntities);
+		return new PageImpl<>(movimentoContaPoupancaRepository//
+				.findByContaId(contaPoupancaEntity, pageRequest), pageRequest, size);
 	}
 
-	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
+	private void enviarEmailParaCliente(ContaEntity contaCorrenteEntity) {
 		ClienteEntity clienteEntity = clienteValidator//
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
 		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank", //

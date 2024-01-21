@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.entities.conta.ContaEntity;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,5 +40,5 @@ public class MovimentoEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "conta_id")
-	private Conta conta;
+	private ContaEntity conta;
 }
