@@ -92,7 +92,8 @@ public class ContaPoupancaService {
 			int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataHoraMovimento");
 		
-		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository.findByNumeroConta(numeroConta).orElseThrow();
+		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository.findByNumeroConta(numeroConta).orElseThrow(() -> 
+				new ObjectNotFoundException("Nenhum movimento encontrado"));
 
 		return new PageImpl<>(movimentoContaPoupancaRepository//
 				.findByContaId(contaPoupancaEntity, pageRequest), pageRequest, size);
