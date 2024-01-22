@@ -86,14 +86,15 @@ public class ContaPoupancaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<MovimentoContaPoupancaEntity> extrato(
-			long numeroConta,
-			int page,
+	public Page<MovimentoContaPoupancaEntity> extrato(//
+			long numeroConta,//
+			int page,//
 			int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataHoraMovimento");
 		
-		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository.findByNumeroConta(numeroConta).orElseThrow(() -> 
-				new ObjectNotFoundException("Nenhum movimento encontrado"));
+		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository//
+				.findByNumeroConta(numeroConta)//
+				.orElseThrow(() -> new ObjectNotFoundException("Conta poupança não encontrada!"));
 
 		return new PageImpl<>(movimentoContaPoupancaRepository//
 				.findByContaId(contaPoupancaEntity, pageRequest), pageRequest, size);
