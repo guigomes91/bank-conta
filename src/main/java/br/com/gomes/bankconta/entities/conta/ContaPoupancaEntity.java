@@ -1,35 +1,25 @@
 package br.com.gomes.bankconta.entities.conta;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.domain.Page;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaOutputDTO;
-import br.com.gomes.bankconta.entities.movimento.MovimentoEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ContaPoupancaEntity extends ContaEntity {
+public class ContaPoupancaEntity extends Conta {
 	
 	@Column(name = "variacao")
 	private int variacao;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "conta")
-	private List<MovimentoEntity> movimentos = new ArrayList<>();
 
 	public ContaPoupancaEntity dtoToEntity(ContaPoupancaInputDTO contaPoupancaInputDTO) {
-		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity();
+		var contaPoupancaEntity = new ContaPoupancaEntity();
+		
 		contaPoupancaEntity.setId(contaPoupancaInputDTO.getId());
 		contaPoupancaEntity.setAgencia(contaPoupancaInputDTO.getAgencia());
 		contaPoupancaEntity.setCliente(contaPoupancaInputDTO.getCliente());

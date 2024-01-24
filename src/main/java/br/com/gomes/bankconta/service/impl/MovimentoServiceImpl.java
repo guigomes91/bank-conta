@@ -11,7 +11,7 @@ import br.com.gomes.bankconta.components.MovimentoContaCorrenteComponent;
 import br.com.gomes.bankconta.components.MovimentoContaPoupancaComponent;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
-import br.com.gomes.bankconta.entities.conta.ContaEntity;
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.enums.TipoConta;
 
 @Service
@@ -30,7 +30,7 @@ public class MovimentoServiceImpl {
 	}
 	
 	@Transactional(readOnly = true)
-	public void consultarMovimento(Operacao operacao, ContaEntity conta) {
+	public void consultarMovimento(Operacao operacao, Conta conta) {
 		operacao.consultarMovimento(conta);
 	}
 	

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.gomes.bankconta.entities.conta.ContaEntity;
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
@@ -25,7 +25,7 @@ public class ContaValidator {
 	private ContaPoupancaRepository contaPoupancaRepository;
 	
 	@Transactional(readOnly = true)
-	public void verificaContaAgenciaExistente(ContaEntity ccEntity) {
+	public void verificaContaAgenciaExistente(Conta ccEntity) {
 		Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
@@ -34,7 +34,7 @@ public class ContaValidator {
 	}
 	
 	@Transactional(readOnly = true)
-	public void verificaClienteJaTemContaCorrente(ContaEntity contaEntity) {
+	public void verificaClienteJaTemContaCorrente(Conta contaEntity) {
 		if (contaEntity instanceof ContaPoupancaEntity) {
 			Optional<ContaPoupancaEntity> contaPoupancaEntity = contaPoupancaRepository.findByCliente(contaEntity.getCliente());
 			contaPoupancaEntity.ifPresent(contaPoupanca -> {

@@ -14,9 +14,7 @@ import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
-import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
-import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
-import br.com.gomes.bankconta.entities.conta.ContaEntity;
+import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
@@ -52,15 +50,16 @@ public class ContaPoupancaService {
 	@Transactional
 	public ContaPoupancaEntity salvar(ContaPoupancaInputDTO contaPoupancaDTO) {
 		clienteValidator.verificaPerfilAdmin(contaPoupancaDTO.getCliente().getId());
-		ContaPoupancaEntity contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(contaPoupancaDTO);
+		var contaPoupancaEntity = new ContaPoupancaEntity().dtoToEntity(contaPoupancaDTO);
 
 		contaValidator.verificaClienteJaTemContaCorrente(contaPoupancaEntity);
 		contaPoupancaEntity.setVariacao(BankGomesConstantes.VARIACAO_POUPANCA);
 		contaValidator.verificaContaAgenciaExistente(contaPoupancaEntity);
 
-		ContaCorrenteEntity contaCorrenteEntity = contaCorrenteRepository//
+		var contaCorrenteEntity = contaCorrenteRepository//
 				.findByCliente(contaPoupancaDTO.getCliente())//
 				.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado!"));
+		
 		contaPoupancaEntity.setAgencia(contaCorrenteEntity.getAgencia());
 		contaPoupancaEntity.setNumeroConta(contaCorrenteEntity.getNumeroConta());
 
@@ -72,7 +71,7 @@ public class ContaPoupancaService {
 
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(Long numeroConta) {
-		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository//
+		var contaPoupancaEntity = contaPoupancaRepository//
 				.findByNumeroConta(numeroConta)//
 				.orElseThrow(//
 						() -> new DataIntegrityViolationException("Conta poupança não encontrada")//
@@ -92,16 +91,16 @@ public class ContaPoupancaService {
 			int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataHoraMovimento");
 		
-		ContaPoupancaEntity contaPoupancaEntity = contaPoupancaRepository//
+		var contaPoupancaEntity = contaPoupancaRepository//
 				.findByNumeroConta(numeroConta)//
 				.orElseThrow(() -> new ObjectNotFoundException("Conta poupança não encontrada!"));
 
 		return new PageImpl<>(movimentoContaPoupancaRepository//
-				.findByContaId(contaPoupancaEntity, pageRequest), pageRequest, size);
+				.findByConta(contaPoupancaEntity, pageRequest), pageRequest, size);
 	}
 
-	private void enviarEmailParaCliente(ContaEntity contaCorrenteEntity) {
-		ClienteEntity clienteEntity = clienteValidator//
+	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
+		var clienteEntity = clienteValidator//
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
 		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank", //
 				"Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");

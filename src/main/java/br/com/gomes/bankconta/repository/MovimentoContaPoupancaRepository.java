@@ -13,5 +13,5 @@ import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
 @Repository
 public interface MovimentoContaPoupancaRepository extends JpaRepository<MovimentoContaPoupancaEntity, UUID> {
 
-	List<MovimentoContaPoupancaEntity> findByContaId(ContaPoupancaEntity conta, Pageable pageable);
+	List<MovimentoContaPoupancaEntity> findByConta(ContaPoupancaEntity conta, Pageable pageable);
 }

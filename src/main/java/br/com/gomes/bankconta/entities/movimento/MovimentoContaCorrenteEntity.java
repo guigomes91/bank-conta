@@ -6,10 +6,8 @@ import java.util.stream.Collectors;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "movimento_conta_corrente")
 public class MovimentoContaCorrenteEntity extends MovimentoEntity {
 	
 	public static MovimentoContaCorrenteEntity dtoToEntity(MovimentoInputDTO input) {

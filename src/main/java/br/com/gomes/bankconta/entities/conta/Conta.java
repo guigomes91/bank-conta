@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-public abstract class ContaEntity {
+public abstract class Conta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
