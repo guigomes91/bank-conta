@@ -72,4 +72,8 @@ public class ContaPoupancaController {
 		
 		return ResponseEntity.ok(movimentosEntity.map(MovimentoOutputDTO::entityToDto));
 	}
+	
+	public <T> ResponseEntity<T> desativarConta() {
+		return null;
+	}
 }
