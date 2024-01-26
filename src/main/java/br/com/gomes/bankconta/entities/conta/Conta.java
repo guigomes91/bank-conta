@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
+import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.enums.TipoConta;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,6 @@ public abstract class Conta {
 	private UUID id;
 	
 	private int numeroConta;
-	
 	private int agencia;
 	
 	@ManyToOne
@@ -37,9 +37,8 @@ public abstract class Conta {
 	private ClienteEntity cliente;
 	
 	private BigDecimal saldo;
-	
 	private TipoConta tipoConta;
-	
 	private LocalDate dataCriacao = LocalDate.now();
+	private SituacaoConta situacaoConta;
 	
 }

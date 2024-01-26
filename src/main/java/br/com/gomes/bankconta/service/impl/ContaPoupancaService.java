@@ -71,11 +71,7 @@ public class ContaPoupancaService {
 
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(Long numeroConta) {
-		var contaPoupancaEntity = contaPoupancaRepository//
-				.findByNumeroConta(numeroConta)//
-				.orElseThrow(//
-						() -> new DataIntegrityViolationException("Conta poupança não encontrada")//
-				);
+		var contaPoupancaEntity = buscaPorNumeroConta(numeroConta);
 
 		return new SaldoDTO(Long.valueOf(contaPoupancaEntity.getNumeroConta()), contaPoupancaEntity.getSaldo());
 	}
@@ -91,12 +87,14 @@ public class ContaPoupancaService {
 			int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "dataHoraMovimento");
 		
-		var contaPoupancaEntity = contaPoupancaRepository//
-				.findByNumeroConta(numeroConta)//
-				.orElseThrow(() -> new ObjectNotFoundException("Conta poupança não encontrada!"));
+		var contaPoupancaEntity = buscaPorNumeroConta(numeroConta);
 
 		return new PageImpl<>(movimentoContaPoupancaRepository//
 				.findByConta(contaPoupancaEntity, pageRequest), pageRequest, size);
+	}
+	
+	public void desativarConta(UUID id) {
+		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
 	}
 
 	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {
@@ -104,5 +102,13 @@ public class ContaPoupancaService {
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
 		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta poupança criada em Gomes Bank", //
 				"Parabéns, você acaba de tomar a sua melhor decisão em poupar seu dinheiro!");
+	}
+	
+	private ContaPoupancaEntity buscaPorNumeroConta(Long numeroConta) {
+		return contaPoupancaRepository//
+				.findByNumeroConta(numeroConta)//
+				.orElseThrow(//
+						() -> new DataIntegrityViolationException("Conta poupança não encontrada")//
+				);
 	}
 }
