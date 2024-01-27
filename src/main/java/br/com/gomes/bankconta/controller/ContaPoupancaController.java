@@ -22,6 +22,7 @@ import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
+import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.service.impl.ContaPoupancaService;
 import jakarta.validation.Valid;
 
@@ -75,7 +76,7 @@ public class ContaPoupancaController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<ContaPoupancaOutputDTO> desativarConta() {
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<SituacaoConta> desativarConta(@PathVariable UUID id) {
+		return ResponseEntity.ok(contaPoupancaService.desativarConta(id));
 	}
 }

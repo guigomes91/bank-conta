@@ -17,6 +17,7 @@ import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
+import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.repository.ContaPoupancaRepository;
 import br.com.gomes.bankconta.repository.MovimentoContaPoupancaRepository;
@@ -93,8 +94,11 @@ public class ContaPoupancaService {
 				.findByConta(contaPoupancaEntity, pageRequest), pageRequest, size);
 	}
 	
-	public void desativarConta(UUID id) {
+	public SituacaoConta desativarConta(UUID id) {
 		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
+		contaPoupancaEntity.setSituacaoConta(SituacaoConta.EXCLUIDO);
+		contaPoupancaRepository.save(contaPoupancaEntity);
+		return SituacaoConta.EXCLUIDO;
 	}
 
 	private void enviarEmailParaCliente(Conta contaCorrenteEntity) {

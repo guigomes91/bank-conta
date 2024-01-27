@@ -26,7 +26,8 @@ public class ContaValidator {
 	
 	@Transactional(readOnly = true)
 	public void verificaContaAgenciaExistente(Conta ccEntity) {
-		Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
+		Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository//
+				.findByNumeroContaAndAgencia(ccEntity.getNumeroConta(), ccEntity.getAgencia());
 		
 		contaCorrenteEntity.ifPresent(cc -> {
 			new DataIntegrityViolationException("Conta já existe!");
@@ -50,16 +51,19 @@ public class ContaValidator {
 	
 	@Transactional(readOnly = true)
 	public ContaCorrenteEntity contaCorrenteExistente(UUID id) {
-		return contaCorrenteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta corrente não cadastrada!"));
+		return contaCorrenteRepository.findById(id).orElseThrow(()//
+				-> new ObjectNotFoundException("Conta corrente não cadastrada!"));
 	}
 	
 	@Transactional(readOnly = true)
 	public ContaPoupancaEntity contaPoupancaExistente(UUID id) {
-		return contaPoupancaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
+		return contaPoupancaRepository.findById(id).orElseThrow(()//
+				-> new ObjectNotFoundException("Conta poupança não cadastrada!"));
 	}
 	
 	@Transactional(readOnly = true)
 	public ContaPoupancaEntity contaPoupanca(UUID id) {
-		return contaPoupancaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Conta poupança não cadastrada!"));
+		return contaPoupancaRepository.findById(id).orElseThrow(()//
+				-> new ObjectNotFoundException("Conta poupança não cadastrada!"));
 	}
 }
