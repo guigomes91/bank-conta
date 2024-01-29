@@ -26,6 +26,7 @@ import br.com.gomes.bankconta.service.exceptions.ObjectNotFoundException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
 import br.com.gomes.bankconta.validators.ContaValidator;
+import br.com.gomes.bankconta.validators.SaldoContaValidator;
 
 @Service
 public class ContaPoupancaService {
@@ -44,6 +45,9 @@ public class ContaPoupancaService {
 
 	@Autowired
 	private ContaValidator contaValidator;
+	
+	@Autowired
+	private SaldoContaValidator saldoValidator;
 
 	@Autowired
 	private ClienteValidator clienteValidator;
@@ -97,6 +101,8 @@ public class ContaPoupancaService {
 	@Transactional
 	public SituacaoConta desativarConta(UUID id) {
 		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
+		saldoValidator.verificaSaldoPoupancaPositivo(contaPoupancaEntity.getSaldo());
+		
 		contaPoupancaEntity.setSituacaoConta(SituacaoConta.EXCLUIDO);
 		contaPoupancaRepository.save(contaPoupancaEntity);
 		

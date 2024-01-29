@@ -1,25 +1,21 @@
 package br.com.gomes.bankconta.validators;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
-import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
+import br.com.gomes.bankconta.resources.exceptions.BadRequestException;
 
 @Component
 public class SaldoContaValidator {
 	
 	@Autowired
 	private ContaCorrenteRepository contaCorrenteRepository;
-	
-	@Autowired
-	private ContaValidator contaValidator;
 
 	public void movimentarSaldo(ContaCorrenteEntity contaCorrenteEntity, MovimentoInputDTO movimento) {
 		if (movimento.getTipoMovimento() == TipoMovimento.DEBITO) {
@@ -33,8 +29,15 @@ public class SaldoContaValidator {
 		contaCorrenteRepository.save(contaCorrenteEntity);
 	}
 	
-	public BigDecimal consultaSaldoPoupanca(UUID id) {
-		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
-		return contaPoupancaEntity.getSaldo();
+	public void verificaSaldoPoupancaNegativo(BigDecimal saldo) {
+		if (saldo.doubleValue() <= 0) {
+			throw new BadRequestException("Saldo insuficiente!");
+		}
+	}
+	
+	public void verificaSaldoPoupancaPositivo(BigDecimal saldo) {
+		if (saldo.doubleValue() > 0) {
+			throw new BadRequestException("Saldo positivo na conta!");
+		}
 	}
 }
