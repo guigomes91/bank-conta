@@ -94,10 +94,12 @@ public class ContaPoupancaService {
 				.findByConta(contaPoupancaEntity, pageRequest), pageRequest, size);
 	}
 	
+	@Transactional
 	public SituacaoConta desativarConta(UUID id) {
 		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
 		contaPoupancaEntity.setSituacaoConta(SituacaoConta.EXCLUIDO);
 		contaPoupancaRepository.save(contaPoupancaEntity);
+		
 		return SituacaoConta.EXCLUIDO;
 	}
 
