@@ -51,9 +51,9 @@ public class ContaCorrenteController {
 		return ResponseEntity.ok(new ContaCorrenteOutputDTO(ccEntity));
 	}
 	
-	@GetMapping(value = "/extrato/{cc}")
+	@GetMapping(value = "/extrato/{numeroConta}")
 	public ResponseEntity<Page<ContaCorrenteOutputDTO>> extrato(
-			@PathVariable long cc, 
+			@PathVariable long numeroConta, 
 			@RequestParam(value = "dataInicio", required = true) LocalDate dataInicio,
 			@RequestParam(value = "dataTermino", required = true) LocalDate dataTermino) {
 		
