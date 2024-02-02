@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
 import br.com.gomes.bankconta.repository.MovimentoContaPoupancaRepository;
 import br.com.gomes.bankconta.service.impl.Operacao;
@@ -27,7 +28,13 @@ public class MovimentoContaPoupancaComponent implements Operacao {
 
 	@Override
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
-		return null;
+		ContaPoupancaEntity contaPoupancaEntity = null;
+		if (conta instanceof ContaPoupancaEntity) {
+			contaPoupancaEntity = (ContaPoupancaEntity) conta;
+		}
+		
+		List<MovimentoContaPoupancaEntity> listaMovimentoContaPoupanca = contaPoupancaRepository.findByConta(contaPoupancaEntity, null);
+		return MovimentoContaPoupancaEntity.listEntityToList(listaMovimentoContaPoupanca);
 	}
 
 }
