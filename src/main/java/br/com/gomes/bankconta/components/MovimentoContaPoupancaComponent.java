@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
@@ -27,6 +28,7 @@ public class MovimentoContaPoupancaComponent implements Operacao {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
 		ContaPoupancaEntity contaPoupancaEntity = null;
 		if (conta instanceof ContaPoupancaEntity) {
