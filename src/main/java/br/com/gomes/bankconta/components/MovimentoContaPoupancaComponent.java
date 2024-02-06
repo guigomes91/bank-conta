@@ -21,6 +21,7 @@ public class MovimentoContaPoupancaComponent implements Operacao {
 	private MovimentoContaPoupancaRepository contaPoupancaRepository;
 	
 	@Override
+	@Transactional
 	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
 		MovimentoContaPoupancaEntity movimentoContaPoupancaEntity = contaPoupancaRepository.save(MovimentoContaPoupancaEntity.dtoToEntity(movimento));
 		

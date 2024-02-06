@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
@@ -28,6 +29,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 	private SaldoContaValidator saldoValidator;
 
 	@Override
+	@Transactional
 	public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
 		ContaCorrenteEntity contaCorrenteEntity = ccValidator.contaCorrenteExistente(movimento.getConta().getId());
 		MovimentoContaCorrenteEntity entity = MovimentoContaCorrenteEntity.dtoToEntity(movimento);
@@ -40,6 +42,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
 		return MovimentoContaCorrenteEntity.listEntityToListDTO(movRepository.findAll());
 	}
