@@ -11,6 +11,7 @@ import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaPoupancaEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaPoupancaEntity;
+import br.com.gomes.bankconta.enums.TipoConta;
 import br.com.gomes.bankconta.repository.MovimentoContaPoupancaRepository;
 import br.com.gomes.bankconta.service.impl.Operacao;
 
@@ -38,6 +39,16 @@ public class MovimentoContaPoupancaComponent implements Operacao {
 		
 		List<MovimentoContaPoupancaEntity> listaMovimentoContaPoupanca = contaPoupancaRepository.findByConta(contaPoupancaEntity, null);
 		return MovimentoContaPoupancaEntity.listEntityToList(listaMovimentoContaPoupanca);
+	}
+
+	@Override
+	public Operacao getInstance() {
+		return this;
+	}
+
+	@Override
+	public TipoConta getTipoOperacao() {
+		return TipoConta.CP;
 	}
 
 }

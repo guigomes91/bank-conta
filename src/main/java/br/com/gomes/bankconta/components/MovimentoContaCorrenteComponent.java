@@ -11,6 +11,7 @@ import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
 import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
+import br.com.gomes.bankconta.enums.TipoConta;
 import br.com.gomes.bankconta.repository.MovimentoContaCorrenteRepository;
 import br.com.gomes.bankconta.service.impl.Operacao;
 import br.com.gomes.bankconta.validators.ContaValidator;
@@ -45,6 +46,16 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 	@Transactional(readOnly = true)
 	public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
 		return MovimentoContaCorrenteEntity.listEntityToListDTO(movRepository.findAll());
+	}
+
+	@Override
+	public Operacao getInstance() {
+		return this;
+	}
+
+	@Override
+	public TipoConta getTipoOperacao() {
+		return TipoConta.CC;
 	}
 
 }

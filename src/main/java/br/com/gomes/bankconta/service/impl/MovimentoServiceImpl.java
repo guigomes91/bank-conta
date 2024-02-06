@@ -1,14 +1,13 @@
 package br.com.gomes.bankconta.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.gomes.bankconta.components.MovimentoContaCorrenteComponent;
-import br.com.gomes.bankconta.components.MovimentoContaPoupancaComponent;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.entities.conta.Conta;
@@ -18,10 +17,7 @@ import br.com.gomes.bankconta.enums.TipoConta;
 public class MovimentoServiceImpl {
 	
 	@Autowired
-	private MovimentoContaCorrenteComponent movimentoCC;
-	
-	@Autowired
-	private MovimentoContaPoupancaComponent movimentoCP;
+	private List<Operacao> operacoes;
 
 	@Transactional
 	public MovimentoOutputDTO lancarMovimento(TipoConta tipoConta, MovimentoInputDTO movimento) {
@@ -37,8 +33,9 @@ public class MovimentoServiceImpl {
 	private Map<TipoConta, Operacao> carregarOperacoes() {
 		Map<TipoConta, Operacao> tipoMovimentos = new HashMap<>();
 		
-		tipoMovimentos.put(TipoConta.CC, movimentoCC);
-		tipoMovimentos.put(TipoConta.CP, movimentoCP);
+		operacoes.forEach(op -> {
+			tipoMovimentos.put(op.getTipoOperacao(), op.getInstance());
+		});
 		
 		return tipoMovimentos;
 	}
