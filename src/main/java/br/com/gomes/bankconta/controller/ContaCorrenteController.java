@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import br.com.gomes.bankconta.dto.conta.ContaCorrenteInputDTO;
 import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
+import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.service.impl.ContaCorrenteService;
 import jakarta.validation.Valid;
 
@@ -28,12 +30,12 @@ import jakarta.validation.Valid;
 public class ContaCorrenteController {
 	
 	@Autowired
-	private ContaCorrenteService ccService;
+	private ContaCorrenteService contaCorrenteService;
 
 	@PostMapping
 	public ResponseEntity<ContaCorrenteOutputDTO> salvar(
 			@RequestBody @Valid ContaCorrenteInputDTO ccDTO) {
-		ContaCorrenteEntity ccEntity = ccService.salvar(ccDTO);
+		ContaCorrenteEntity ccEntity = contaCorrenteService.salvar(ccDTO);
 		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -46,7 +48,7 @@ public class ContaCorrenteController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ContaCorrenteOutputDTO> consultarPorId(@PathVariable UUID id) {
-		ContaCorrenteEntity ccEntity = ccService.consultarPorId(id);
+		ContaCorrenteEntity ccEntity = contaCorrenteService.consultarPorId(id);
 
 		return ResponseEntity.ok(new ContaCorrenteOutputDTO(ccEntity));
 	}
@@ -62,8 +64,13 @@ public class ContaCorrenteController {
 	
 	@GetMapping(value = "/saldo/{cc}")
 	public ResponseEntity<SaldoDTO> visualizarSaldo(@PathVariable int cc) {
-		SaldoDTO saldoDTO = ccService.getSaldo(cc);
+		SaldoDTO saldoDTO = contaCorrenteService.getSaldo(cc);
 		
 		return ResponseEntity.ok(saldoDTO);
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<SituacaoConta> desativarConta(@PathVariable UUID id) {
+		return ResponseEntity.ok(contaCorrenteService.desativarConta(id));
 	}
 }

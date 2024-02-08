@@ -16,33 +16,38 @@ import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.entities.conta.ContaCorrenteEntity;
+import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.repository.ContaCorrenteRepository;
 import br.com.gomes.bankconta.service.exceptions.DataIntegrityViolationException;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ClienteValidator;
 import br.com.gomes.bankconta.validators.ContaValidator;
+import br.com.gomes.bankconta.validators.SaldoContaValidator;
 
 @Service
 public class ContaCorrenteService {
 
 	@Autowired
-	private ContaCorrenteRepository ccRepository;
+	private ContaCorrenteRepository contaCorrenteRepository;
 	
 	@Autowired
 	private EnviaEmailComponent emailComponente;
 	
 	@Autowired
-	private ContaValidator ccValidator;
+	private ContaValidator contaCorrenteValidator;
 	
 	@Autowired
 	private ClienteValidator clienteValidator;
+	
+	@Autowired
+	private SaldoContaValidator saldoValidator;
 	
 	@Transactional
 	public ContaCorrenteEntity salvar(ContaCorrenteInputDTO ccDTO) {
 		clienteValidator.verificaPerfilAdmin(ccDTO.getCliente().getId());
 		ContaCorrenteEntity contaCorrenteEntity = new ContaCorrenteEntity().dtoToEntity(ccDTO);
 		
-		ccValidator.verificaClienteJaTemContaCorrente(contaCorrenteEntity);
+		contaCorrenteValidator.verificaClienteJaTemContaCorrente(contaCorrenteEntity);
 		
 		Random random = new Random();
 		int numeroConta = random.nextInt(BankGomesConstantes.MAX_CONTAS - BankGomesConstantes.MIN_CONTAS) + BankGomesConstantes.MIN_CONTAS;
@@ -51,9 +56,9 @@ public class ContaCorrenteService {
 		contaCorrenteEntity.setNumeroConta(numeroConta);
 		contaCorrenteEntity.setAgencia(agencia);
 		
-		ccValidator.verificaContaAgenciaExistente(contaCorrenteEntity);
+		contaCorrenteValidator.verificaContaAgenciaExistente(contaCorrenteEntity);
 		
-		contaCorrenteEntity = ccRepository.save(contaCorrenteEntity);
+		contaCorrenteEntity = contaCorrenteRepository.save(contaCorrenteEntity);
 		enviarEmailParaCliente(contaCorrenteEntity);
 		
 		return contaCorrenteEntity;
@@ -61,7 +66,7 @@ public class ContaCorrenteService {
 	
 	@Transactional(readOnly = true)
 	public SaldoDTO getSaldo(int cc) {
-		ContaCorrenteEntity contaCorrenteEntity = ccRepository
+		ContaCorrenteEntity contaCorrenteEntity = contaCorrenteRepository
 				.findByNumeroConta(cc)
 				.orElseThrow(
 						() -> new DataIntegrityViolationException("Conta corrente não encontrada")
@@ -71,7 +76,7 @@ public class ContaCorrenteService {
 	}
 	
 	public ContaCorrenteEntity consultarPorId(UUID id) {
-		return ccValidator.contaCorrenteExistente(id);
+		return contaCorrenteValidator.contaCorrenteExistente(id);
 	}
 	
 	@Transactional(readOnly = true)
@@ -83,5 +88,16 @@ public class ContaCorrenteService {
 		ClienteEntity clienteEntity = clienteValidator
 				.verificaClienteExistente(contaCorrenteEntity.getCliente().getId());
 		emailComponente.enviarEmail(new ClienteDTO(clienteEntity), "Conta corrente criada em Gomes Bank", "Parabéns, você acaba de adquirir uma vida sem complicações!");
+	}
+
+	@Transactional
+	public SituacaoConta desativarConta(UUID id) {
+		ContaCorrenteEntity contaCorrenteEntity = contaCorrenteValidator.contaCorrenteExistente(id);
+		saldoValidator.verificaSaldoPositivo(contaCorrenteEntity.getSaldo());
+		
+		contaCorrenteEntity.setSituacaoConta(SituacaoConta.EXCLUIDO);
+		contaCorrenteRepository.save(contaCorrenteEntity);
+		
+		return contaCorrenteEntity.getSituacaoConta();
 	}
 }

@@ -29,13 +29,13 @@ public class SaldoContaValidator {
 		contaCorrenteRepository.save(contaCorrenteEntity);
 	}
 	
-	public void verificaSaldoPoupancaNegativo(BigDecimal saldo) {
+	public void verificaSaldoNegativo(BigDecimal saldo) {
 		if (saldo.doubleValue() <= 0) {
 			throw new BadRequestException("Saldo insuficiente!");
 		}
 	}
 	
-	public void verificaSaldoPoupancaPositivo(BigDecimal saldo) {
+	public void verificaSaldoPositivo(BigDecimal saldo) {
 		if (saldo.doubleValue() > 0) {
 			throw new BadRequestException("Saldo positivo na conta!");
 		}

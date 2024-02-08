@@ -10,7 +10,10 @@ import br.com.gomes.bankconta.enums.TipoConta;
 public interface Operacao {
 
 	MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento);
+	
 	List<MovimentoOutputDTO> consultarMovimento(Conta conta);
+	
 	Operacao getInstance();
+	
 	TipoConta getTipoOperacao();
 }

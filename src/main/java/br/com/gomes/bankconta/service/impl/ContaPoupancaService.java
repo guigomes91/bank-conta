@@ -101,7 +101,7 @@ public class ContaPoupancaService {
 	@Transactional
 	public SituacaoConta desativarConta(UUID id) {
 		ContaPoupancaEntity contaPoupancaEntity = contaValidator.contaPoupancaExistente(id);
-		saldoValidator.verificaSaldoPoupancaPositivo(contaPoupancaEntity.getSaldo());
+		saldoValidator.verificaSaldoPositivo(contaPoupancaEntity.getSaldo());
 		
 		contaPoupancaEntity.setSituacaoConta(SituacaoConta.EXCLUIDO);
 		contaPoupancaRepository.save(contaPoupancaEntity);
