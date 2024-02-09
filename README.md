@@ -13,6 +13,9 @@
 - Design Patterns
 - SOLID
 
+Os microserviços seram executados dentro de containers do docker em uma VM do Linux.
+Será criado um microserviço que registra todas movimentações dos clientes utilizando MongoDB como database de documentos NoSQL.  
+
 Este serviço é responsável pelo gerenciamento de clientes e suas contas, tais como conta corrente e conta poupança. O serviço realiza o cadastro de clientes, contas e
 realiza consulta de extratos, aplicação na poupança, retirada de dinheiro da conta corrente, visualização de saldos e muito mais.
 Após realizar o cadastro de uma conta para o cliente, o serviço publica uma mensagem para o RabbitMQ na exchange *gomes-bank-email* para queue *notifications* e com a chave de roteamento *gomes.bank.#*. O serviço 
