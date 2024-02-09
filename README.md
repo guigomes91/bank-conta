@@ -8,6 +8,10 @@
 - Lombok
 - Spring Web
 - Maven
+- Broker de mensageria (RabbitMQ)
+- Boas práticas de programação (DRY, KISS entre outros)
+- Design Patterns
+- SOLID
 
 Este serviço é responsável pelo gerenciamento de clientes e suas contas, tais como conta corrente e conta poupança. O serviço realiza o cadastro de clientes, contas e
 realiza consulta de extratos, aplicação na poupança, retirada de dinheiro da conta corrente, visualização de saldos e muito mais.
