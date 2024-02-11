@@ -14,7 +14,7 @@
 - SOLID
 
 Os microserviços seram executados dentro de containers do docker em uma VM do Linux.
-Será criado um microserviço que registrara todas movimentações dos clientes utilizando MongoDB para armazenamento dos dados.  
+Será criado o microserviço *bank-client-transaction* que registrara todas movimentações dos clientes utilizando MongoDB para armazenamento dos dados.  
 
 Este serviço é responsável pelo gerenciamento de clientes e suas contas, tais como conta corrente e conta poupança. O serviço realiza o cadastro de clientes, contas e
 realiza consulta de extratos, aplicação na poupança, retirada de dinheiro da conta corrente, visualização de saldos e muito mais.
