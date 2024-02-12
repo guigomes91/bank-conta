@@ -25,3 +25,6 @@ UML do projeto
 
 [Diagrama UML](https://github.com/guigomes91/bank-conta/blob/master/Classe%20UML%20-%20Microservi%C3%A7o%20Conta.png)
 
+Modelo arquitetural do projeto
+
+[SAGA](https://github.com/guigomes91/bank-conta/blob/master/arq-bank.png)
