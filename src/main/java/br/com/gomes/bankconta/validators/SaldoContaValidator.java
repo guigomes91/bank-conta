@@ -17,7 +17,7 @@ public class SaldoContaValidator {
 	@Autowired
 	private ContaCorrenteRepository contaCorrenteRepository;
 
-	public void movimentarSaldo(ContaCorrenteEntity contaCorrenteEntity, MovimentoInputDTO movimento) {
+	public void movimentarSaldoContaCorrente(ContaCorrenteEntity contaCorrenteEntity, MovimentoInputDTO movimento) {
 		if (movimento.getTipoMovimento() == TipoMovimento.DEBITO) {
 			contaCorrenteEntity.setSaldo(contaCorrenteEntity.getSaldo().subtract(movimento.getValor()));
 		}

@@ -37,7 +37,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 		
 		MovimentoOutputDTO movimentoOutputDTO = MovimentoOutputDTO.entityToDto(movRepository.save(entity));
 		
-		saldoValidator.movimentarSaldo(contaCorrenteEntity, movimento);		
+		saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntity, movimento);		
 		
 		return movimentoOutputDTO;
 	}
