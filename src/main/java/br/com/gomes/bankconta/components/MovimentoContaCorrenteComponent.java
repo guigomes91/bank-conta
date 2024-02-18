@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.components;
 
 import java.util.List;
 
+import br.com.gomes.bankconta.amqp.transacao.EnviaTransacaoContaCorrenteComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 	
 	@Autowired
 	private MovimentoContaCorrenteRepository movRepository;
+
+	@Autowired
+	private EnviaTransacaoContaCorrenteComponent enviaTransacaoContaCorrenteComponent;
 	
 	@Autowired
 	private ContaValidator ccValidator;
@@ -37,7 +41,10 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 		
 		MovimentoOutputDTO movimentoOutputDTO = MovimentoOutputDTO.entityToDto(movRepository.save(entity));
 		
-		saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntity, movimento);		
+		saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntity, movimento);
+
+		movimento.setId(movimentoOutputDTO.getId());
+		enviaTransacaoContaCorrenteComponent.publicarTransacao(movimento);
 		
 		return movimentoOutputDTO;
 	}

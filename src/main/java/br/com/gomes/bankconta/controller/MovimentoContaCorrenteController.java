@@ -24,7 +24,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(value = "/movimentocc/")
 public class MovimentoContaCorrenteController {
-	
 	@Autowired
 	private MovimentoServiceImpl movimentoService;
 

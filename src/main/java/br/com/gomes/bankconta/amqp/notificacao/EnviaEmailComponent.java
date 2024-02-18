@@ -1,4 +1,4 @@
-package br.com.gomes.bankconta.amqp;
+package br.com.gomes.bankconta.amqp.notificacao;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,12 @@ public class EnviaEmailComponent {
 
 	public void enviarEmail(ClienteDTO clienteDTO, String assunto, String mensagem) {
 		log.info("Sending message with email {}", clienteDTO.getEmail());
-		rabbitTemplate.convertAndSend(AMQPConstantes.TOPIC_EXCHANGE_NAME, "gomes.bank.email", new EmailClienteInput(clienteDTO.getNome(), clienteDTO.getEmail(), assunto, mensagem));
+		rabbitTemplate.convertAndSend(
+				AMQPConstantes.TOPIC_EXCHANGE_NAME_NOTIFICATION,
+				"gomes.bank.email",
+				new EmailClienteInput(
+						clienteDTO.getNome(),
+						clienteDTO.getEmail(),
+						assunto, mensagem));
 	}
 }

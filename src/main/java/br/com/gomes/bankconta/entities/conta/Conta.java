@@ -7,6 +7,7 @@ import java.util.UUID;
 import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.enums.SituacaoConta;
 import br.com.gomes.bankconta.enums.TipoConta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,7 +39,10 @@ public abstract class Conta {
 	
 	private BigDecimal saldo;
 	private TipoConta tipoConta;
+
+	@JsonIgnore
 	private LocalDate dataCriacao = LocalDate.now();
+
 	private SituacaoConta situacaoConta;
 	
 }

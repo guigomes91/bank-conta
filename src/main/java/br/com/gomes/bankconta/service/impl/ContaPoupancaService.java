@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.gomes.bankconta.amqp.EnviaEmailComponent;
+import br.com.gomes.bankconta.amqp.notificacao.EnviaEmailComponent;
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.dto.conta.ContaPoupancaInputDTO;
 import br.com.gomes.bankconta.dto.conta.SaldoDTO;

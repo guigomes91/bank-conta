@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BankContaApplication {
 
 	public static void main(String[] args) {
-		System.setProperty("server.servlet.context-path", "/bankconta");
+		System.setProperty("server.servlet.context-path", "/bank-conta");
 		SpringApplication.run(BankContaApplication.class, args);
 	}
 }
