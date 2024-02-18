@@ -23,8 +23,9 @@ Após realizar o cadastro de uma conta para o cliente, o serviço publica uma me
 
 UML do projeto
 
-[Diagrama UML](https://github.com/guigomes91/bank-conta/blob/master/Classe%20UML%20-%20Microservi%C3%A7o%20Conta.png)
+![image](https://github.com/guigomes91/bank-conta/assets/44264050/b0fdc106-c578-4b63-b13e-9c6ca2d1ddd8)
 
 Modelo arquitetural do projeto
 
-[SAGA](https://github.com/guigomes91/bank-conta/blob/master/arq-bank.png)
+![image](https://github.com/guigomes91/bank-conta/assets/44264050/58b198f7-25af-4196-b332-c6c93110fd3e)
+
