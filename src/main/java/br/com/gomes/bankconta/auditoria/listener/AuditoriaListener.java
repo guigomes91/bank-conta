@@ -2,11 +2,13 @@ package br.com.gomes.bankconta.auditoria.listener;
 
 import br.com.gomes.bankconta.auditoria.Auditavel;
 import br.com.gomes.bankconta.auditoria.model.Auditoria;
+import br.com.gomes.bankconta.components.UsuarioLogado;
 import br.com.gomes.bankconta.security.UserSS;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 
@@ -22,14 +24,19 @@ public class AuditoriaListener {
         }
 
         audit.setCreatedOn(LocalDateTime.now());
-        audit.setCreatedBy("guilherme@email.com");
+        audit.setCreatedBy(UsuarioLogado.getCurrentUser());
     }
 
     @PreUpdate
     public void setUpdatedOn(Auditavel auditable) {
         Auditoria audit = auditable.getAudit();
 
+        if (audit == null) {
+            audit = new Auditoria();
+            auditable.setAudit(audit);
+        }
+
         audit.setUpdatedOn(LocalDateTime.now());
-        audit.setUpdatedBy("guilherme@email.com");
+        audit.setUpdatedBy(UsuarioLogado.getCurrentUser());
     }
 }

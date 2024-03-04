@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.service.impl;
 
 import java.util.UUID;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,6 +29,7 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
+	@Transactional
 	public ClienteEntity create(ClienteDTO clienteDTO) {
 		clienteDTO.setId(null);
 		clienteDTO.setSenha(encoder.encode(clienteDTO.getSenha()));
@@ -39,6 +41,7 @@ public class ClienteService {
 		return repository.save(newObj);
 	}
 
+	@Transactional
 	public ClienteEntity update(ClienteDTO clienteDTO, UUID id) {
 		clienteDTO.setId(id);
 		ClienteEntity clienteOld = clienteValidator.verificaClienteExistente(id);
