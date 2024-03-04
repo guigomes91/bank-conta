@@ -8,29 +8,25 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import br.com.gomes.bankconta.auditoria.Auditavel;
+import br.com.gomes.bankconta.auditoria.listener.AuditoriaListener;
+import br.com.gomes.bankconta.auditoria.model.Auditoria;
+import jakarta.persistence.*;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.gomes.bankconta.dto.cliente.ClienteDTO;
 import br.com.gomes.bankconta.enums.Perfil;
 import br.com.gomes.bankconta.enums.SituacaoCliente;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @Entity
+@EntityListeners(AuditoriaListener.class)
 @AllArgsConstructor
 @Table(name = "cliente")
-public class ClienteEntity {
+public class ClienteEntity implements Auditavel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -64,12 +60,15 @@ public class ClienteEntity {
 	private String senha;
 	
 	private SituacaoCliente situacao;
-	
+
     private Date dataCriacao;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>();
+
+	@Embedded
+	private Auditoria auditoria;
 	
 	public ClienteEntity() {
 		addPerfil(Perfil.CLIENTE);
@@ -99,6 +98,16 @@ public class ClienteEntity {
 
 	public void addPerfil(Perfil perfil) {
 		this.perfis.add(perfil.getCodigo());
+	}
+
+	@Override
+	public Auditoria getAudit() {
+		return this.auditoria;
+	}
+
+	@Override
+	public void setAudit(Auditoria auditoria) {
+		this.auditoria = auditoria;
 	}
 	
 	@Override
