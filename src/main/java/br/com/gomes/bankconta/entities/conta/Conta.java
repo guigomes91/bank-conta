@@ -53,6 +53,10 @@ public abstract class Conta implements Auditavel {
 	@Embedded
 	private Auditoria auditoria;
 
+	public Conta(UUID id) {
+		this.id = id;
+	}
+
 	@Override
 	public Auditoria getAudit() {
 		return this.auditoria;

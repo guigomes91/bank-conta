@@ -83,11 +83,13 @@ public class MovimentoContaCorrenteComponent implements Operacao {
         saldoValidator.verificaSaldoNegativo(contaCorrenteEntityOrigem.getSaldo());
         movimentoValidator.validaTransferenciaMesmaConta(contaCorrenteEntityOrigem, contaCorrenteEntityDestino);
 
+        var transaction = UUID.randomUUID();
         var movimentoTransferenciDebito = new MovimentoInputDTO(
                 TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO,
                 transferenciaInputDTO.getValor()
         );
-        movimentoTransferenciDebito.setConta(contaCorrenteEntityOrigem);
+        movimentoTransferenciDebito.setId(transaction);
+        movimentoTransferenciDebito.setConta(new ContaCorrenteEntity(contaCorrenteEntityOrigem.getId()));
         movimentoTransferenciDebito.setNumeroDocumento(String.valueOf(Math.abs(new Random().nextInt())));
         movimentoTransferenciDebito.setDescricao(transferenciaInputDTO.getDescricao());
         saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntityOrigem,
@@ -97,7 +99,8 @@ public class MovimentoContaCorrenteComponent implements Operacao {
                 TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO,
                 transferenciaInputDTO.getValor()
         );
-        movimentoTransferenciaCredito.setConta(contaCorrenteEntityOrigem);
+        movimentoTransferenciaCredito.setId(transaction);
+        movimentoTransferenciaCredito.setConta(new ContaCorrenteEntity(contaCorrenteEntityDestino.getId()));
         movimentoTransferenciaCredito.setNumeroDocumento(String.valueOf(Math.abs(new Random().nextInt())));
         movimentoTransferenciaCredito.setDescricao("Entrada por transferência de conta corrente");
         saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntityDestino,
@@ -113,7 +116,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
                 String.format(BankGomesConstantes.MENSAGEM_TRANSFERENCIA_ENTRE_CONTAS, contaCorrenteEntityOrigem.getCliente().getNome())
         );
 
-        return UUID.randomUUID();
+        return transaction;
     }
 
     @Override

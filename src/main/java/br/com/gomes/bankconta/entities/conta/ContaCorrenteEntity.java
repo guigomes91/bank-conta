@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.entities.conta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,6 +25,10 @@ public class ContaCorrenteEntity extends Conta {
 	@JsonIgnore
 	@OneToMany(mappedBy = "conta")
 	private List<MovimentoEntity> movimentos = new ArrayList<>();
+
+	public ContaCorrenteEntity(UUID id) {
+		super(id);
+	}
 	
 	public ContaCorrenteEntity dtoToEntity(ContaCorrenteInputDTO ccDTO) {
 		ContaCorrenteEntity ccEntity = new ContaCorrenteEntity();
