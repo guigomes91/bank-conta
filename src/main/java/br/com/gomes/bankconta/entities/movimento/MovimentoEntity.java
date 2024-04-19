@@ -6,13 +6,7 @@ import java.util.UUID;
 
 import br.com.gomes.bankconta.entities.conta.Conta;
 import br.com.gomes.bankconta.enums.TipoMovimento;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,18 +23,26 @@ public class MovimentoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	
+
+	@Column(name = "data_hora_movimento", nullable = false)
 	private LocalDateTime dataHoraMovimento = LocalDateTime.now();
-	
+
+	@Column(name = "numero_documento", length = 10, nullable = false)
 	private String numeroDocumento;
-	
+
+	@Column(name = "valor", nullable = false)
 	private BigDecimal valor = BigDecimal.ZERO;
 	
 	private String descricao;
-	
+
+	@Enumerated(EnumType.STRING)
 	private TipoMovimento tipoMovimento;
 	
-	@ManyToOne
-	@JoinColumn(name = "conta_id")
+	@ManyToOne(optional = false)
+	@JoinColumn(
+			name = "conta_id",
+			nullable = false,
+			foreignKey = @ForeignKey(name = "fk_movimento_conta")
+	)
 	private Conta conta;
 }

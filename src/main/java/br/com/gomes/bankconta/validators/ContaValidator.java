@@ -33,6 +33,14 @@ public class ContaValidator {
 			new DataIntegrityViolationException("Conta já existe!");
 		});
 	}
+
+	@Transactional(readOnly = true)
+	public ContaCorrenteEntity existePorAgenciaConta(int conta, int agencia) {
+		Optional<ContaCorrenteEntity> contaCorrenteEntity = contaCorrenteRepository//
+				.findByNumeroContaAndAgencia(conta, agencia);
+
+        return contaCorrenteEntity.orElseThrow(() -> new ObjectNotFoundException("Conta corrente não cadastrada!"));
+    }
 	
 	@Transactional(readOnly = true)
 	public void verificaClienteJaTemContaCorrente(Conta contaEntity) {

@@ -3,12 +3,8 @@ package br.com.gomes.bankconta.auditoria.listener;
 import br.com.gomes.bankconta.auditoria.Auditavel;
 import br.com.gomes.bankconta.auditoria.model.Auditoria;
 import br.com.gomes.bankconta.components.UsuarioLogado;
-import br.com.gomes.bankconta.security.UserSS;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 

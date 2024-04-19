@@ -25,6 +25,14 @@ public class SaldoContaValidator {
 		if (movimento.getTipoMovimento() == TipoMovimento.CREDITO) {
 			contaCorrenteEntity.setSaldo(contaCorrenteEntity.getSaldo().add(movimento.getValor()));
 		}
+
+		if (movimento.getTipoMovimento() == TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO) {
+			contaCorrenteEntity.setSaldo(contaCorrenteEntity.getSaldo().subtract(movimento.getValor()));
+		}
+
+		if (movimento.getTipoMovimento() == TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO) {
+			contaCorrenteEntity.setSaldo(contaCorrenteEntity.getSaldo().add(movimento.getValor()));
+		}
 		
 		contaCorrenteRepository.save(contaCorrenteEntity);
 	}

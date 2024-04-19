@@ -36,4 +36,9 @@ public class MovimentoInputDTO {
 	private TipoMovimento tipoMovimento;
 
 	private ContaCorrenteEntity conta;
+
+	public MovimentoInputDTO(TipoMovimento tipoMovimento, BigDecimal valor) {
+		this.tipoMovimento = tipoMovimento;
+		this.valor = valor;
+	}
 }

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import br.com.gomes.bankconta.auditoria.Auditavel;
 import br.com.gomes.bankconta.auditoria.listener.AuditoriaListener;
 import br.com.gomes.bankconta.auditoria.model.Auditoria;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -38,7 +39,8 @@ public class ClienteEntity implements Auditavel {
 	
 	@Column(unique = true)
 	private long cpf;
-	
+
+	@JsonIgnore
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
