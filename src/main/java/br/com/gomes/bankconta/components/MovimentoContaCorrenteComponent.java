@@ -11,6 +11,7 @@ import br.com.gomes.bankconta.entities.movimento.MovimentoContaCorrenteEntity;
 import br.com.gomes.bankconta.enums.TipoConta;
 import br.com.gomes.bankconta.enums.TipoMovimento;
 import br.com.gomes.bankconta.repository.MovimentoContaCorrenteRepository;
+import br.com.gomes.bankconta.repository.MovimentoContaCorrenteRepositoryImpl;
 import br.com.gomes.bankconta.service.impl.Operacao;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
 import br.com.gomes.bankconta.validators.ContaValidator;
@@ -31,6 +32,9 @@ public class MovimentoContaCorrenteComponent implements Operacao {
 
     @Autowired
     private MovimentoContaCorrenteRepository movimentoContaCorrenteRepository;
+
+    @Autowired
+    private MovimentoContaCorrenteRepositoryImpl movimentoContaCorrenteRepositoryImpl;
 
     @Autowired
     private EnviaTransacaoContaCorrenteComponent enviaTransacaoContaCorrenteComponent;
@@ -134,6 +138,12 @@ public class MovimentoContaCorrenteComponent implements Operacao {
         );
 
         return transaction;
+    }
+
+    @Transactional(readOnly = true)
+    public MovimentoOutputDTO consultarMovimentoPorDocumento(long contaCorrente, String numeroDocumento) {
+        var movimentoContaCorrenteEntity = movimentoContaCorrenteRepositoryImpl.consultarPorDocumento(contaCorrente, numeroDocumento);
+        return MovimentoOutputDTO.entityToDto(movimentoContaCorrenteEntity);
     }
 
     @Override

@@ -14,7 +14,6 @@ import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class MovimentoContaCorrenteEntity extends MovimentoEntity {

@@ -1,7 +1,6 @@
 package br.com.gomes.bankconta.controller;
 
 import br.com.gomes.bankconta.components.MovimentoContaCorrenteComponent;
-import br.com.gomes.bankconta.dto.conta.ContaCorrenteOutputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.dto.movimento.TransferenciaInputDTO;
@@ -42,11 +41,11 @@ public class MovimentoContaCorrenteController {
 	}
 	
 	@GetMapping(value = "/{cc}")
-	public ResponseEntity<ContaCorrenteOutputDTO> consultaPorDocumento(
+	public ResponseEntity<MovimentoOutputDTO> consultaPorDocumento(
 			@PathVariable long cc,
 			@RequestParam(value = "numeroDocumento", required = true) String numeroDocumento) {
-		
-		return ResponseEntity.ok().build();
+		var movimentoOutputDTO = movimentoContaCorrenteComponent.consultarMovimentoPorDocumento(cc, numeroDocumento);
+		return ResponseEntity.ok(movimentoOutputDTO);
 	}
 
 	@PostMapping(value = "/transferir")
