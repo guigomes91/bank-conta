@@ -1,6 +1,7 @@
 package br.com.gomes.bankconta.components;
 
 import br.com.gomes.bankconta.amqp.transacao.EnviaTransacaoContaCorrenteComponent;
+import br.com.gomes.bankconta.dto.movimento.MovimentoContaCorrenteBuilder;
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
 import br.com.gomes.bankconta.dto.movimento.TransferenciaInputDTO;
@@ -29,7 +30,7 @@ import java.util.UUID;
 public class MovimentoContaCorrenteComponent implements Operacao {
 
     @Autowired
-    private MovimentoContaCorrenteRepository movRepository;
+    private MovimentoContaCorrenteRepository movimentoContaCorrenteRepository;
 
     @Autowired
     private EnviaTransacaoContaCorrenteComponent enviaTransacaoContaCorrenteComponent;
@@ -38,7 +39,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
     private EnviadorEmailComponent enviadorEmailComponent;
 
     @Autowired
-    private ContaValidator ccValidator;
+    private ContaValidator contaValidator;
 
     @Autowired
     private SaldoContaValidator saldoValidator;
@@ -46,70 +47,86 @@ public class MovimentoContaCorrenteComponent implements Operacao {
     @Autowired
     private MovimentoValidator movimentoValidator;
 
+    @Autowired
+    private MovimentoContaCorrenteBuilder movimentoContaCorrenteBuilder;
+
     @Override
     @Transactional
-    public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimento) {
-        ContaCorrenteEntity contaCorrenteEntity = ccValidator.contaCorrenteExistente(movimento.getConta().getId());
-        MovimentoContaCorrenteEntity entity = MovimentoContaCorrenteEntity.dtoToEntity(movimento);
-        MovimentoOutputDTO movimentoOutputDTO = MovimentoOutputDTO.entityToDto(movRepository.save(entity));
+    public MovimentoOutputDTO lancarMovimento(MovimentoInputDTO movimentoInputDTO) {
+        ContaCorrenteEntity contaCorrenteEntity = contaValidator.contaCorrenteExistente(movimentoInputDTO.getConta().getId());
+        MovimentoContaCorrenteEntity movimentoContaCorrenteEntity = MovimentoContaCorrenteEntity.dtoToEntity(movimentoInputDTO);
+        MovimentoOutputDTO movimentoOutputDTO = MovimentoOutputDTO.entityToDto(movimentoContaCorrenteRepository.save(movimentoContaCorrenteEntity));
 
-        saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntity, movimento);
+        saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntity, movimentoInputDTO);
 
-        movimento.setId(movimentoOutputDTO.getId());
-        enviaTransacaoContaCorrenteComponent.publicarTransacao(movimento);
+        movimentoInputDTO.setId(movimentoOutputDTO.getId());
+        enviaTransacaoContaCorrenteComponent.publicarTransacao(movimentoInputDTO);
 
         return movimentoOutputDTO;
     }
 
     @Transactional
-    public UUID transferirContaCorrente(TransferenciaInputDTO transferenciaInputDTO) {
-        MovimentoContaCorrenteEntity movEntityDebitoOrigem = new MovimentoContaCorrenteEntity();
-        MovimentoContaCorrenteEntity movEntityCreditoDestino = new MovimentoContaCorrenteEntity();
-        var contaCorrenteEntityOrigem = ccValidator.existePorAgenciaConta(transferenciaInputDTO.getNumeroContaOrigem(), transferenciaInputDTO.getAgenciaOrigem());
-        var contaCorrenteEntityDestino = ccValidator.existePorAgenciaConta(transferenciaInputDTO.getNumeroContaDestino(), transferenciaInputDTO.getAgenciaDestino());
-
-        //Conta origem
-        movEntityDebitoOrigem.setConta(contaCorrenteEntityOrigem);
-        movEntityDebitoOrigem.setValor(transferenciaInputDTO.getValor());
-        movEntityDebitoOrigem.setTipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO);
-        movEntityDebitoOrigem.setDescricao(transferenciaInputDTO.getDescricao());
-
-        //Conta destino
-        movEntityCreditoDestino.setConta(contaCorrenteEntityDestino);
-        movEntityCreditoDestino.setValor(transferenciaInputDTO.getValor());
-        movEntityCreditoDestino.setTipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO);
-        movEntityCreditoDestino.setDescricao("Entrada por transferência de conta corrente");
+    public UUID transferirValorContaCorrente(TransferenciaInputDTO transferenciaInputDTO) {
+        var contaCorrenteEntityOrigem = contaValidator
+                .existePorAgenciaConta(
+                        transferenciaInputDTO.getNumeroContaOrigem(),
+                        transferenciaInputDTO.getAgenciaOrigem()
+                );
+        var contaCorrenteEntityDestino = contaValidator
+                .existePorAgenciaConta(
+                        transferenciaInputDTO.getNumeroContaDestino(),
+                        transferenciaInputDTO.getAgenciaDestino()
+                );
 
         saldoValidator.verificaSaldoNegativo(contaCorrenteEntityOrigem.getSaldo());
         movimentoValidator.validaTransferenciaMesmaConta(contaCorrenteEntityOrigem, contaCorrenteEntityDestino);
 
         var transaction = UUID.randomUUID();
-        var movimentoTransferenciDebito = new MovimentoInputDTO(
-                TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO,
-                transferenciaInputDTO.getValor()
-        );
-        movimentoTransferenciDebito.setId(transaction);
-        movimentoTransferenciDebito.setConta(new ContaCorrenteEntity(contaCorrenteEntityOrigem.getId()));
-        movimentoTransferenciDebito.setNumeroDocumento(String.valueOf(Math.abs(new Random().nextInt())));
-        movimentoTransferenciDebito.setDescricao(transferenciaInputDTO.getDescricao());
-        saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntityOrigem,
-                movimentoTransferenciDebito);
+        var movimentoTransferenciDebito = movimentoContaCorrenteBuilder
+                .id(transaction)
+                .conta(new ContaCorrenteEntity(contaCorrenteEntityOrigem.getId()))
+                .valor(transferenciaInputDTO.getValor())
+                .tipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO)
+                .descricao(transferenciaInputDTO.getDescricao())
+                .numeroDocumento(String.valueOf(Math.abs(new Random().nextInt())))
+                .buildDto();
 
-        var movimentoTransferenciaCredito = new MovimentoInputDTO(
-                TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO,
-                transferenciaInputDTO.getValor()
+        saldoValidator.movimentarSaldoContaCorrente(
+                contaCorrenteEntityOrigem,
+                movimentoTransferenciDebito
         );
-        movimentoTransferenciaCredito.setId(transaction);
-        movimentoTransferenciaCredito.setConta(new ContaCorrenteEntity(contaCorrenteEntityDestino.getId()));
-        movimentoTransferenciaCredito.setNumeroDocumento(String.valueOf(Math.abs(new Random().nextInt())));
-        movimentoTransferenciaCredito.setDescricao("Entrada por transferência de conta corrente");
-        saldoValidator.movimentarSaldoContaCorrente(contaCorrenteEntityDestino,
-                movimentoTransferenciaCredito);
-        movRepository.saveAll(List.of(movEntityDebitoOrigem, movEntityCreditoDestino));
 
+        var movimentoTransferenciaCredito = movimentoContaCorrenteBuilder
+                .id(transaction)
+                .conta(new ContaCorrenteEntity(contaCorrenteEntityDestino.getId()))
+                .valor(transferenciaInputDTO.getValor())
+                .tipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO)
+                .descricao("Entrada por transferência de conta corrente")
+                .numeroDocumento(String.valueOf(Math.abs(new Random().nextInt())))
+                .buildDto();
+
+        saldoValidator.movimentarSaldoContaCorrente(
+                contaCorrenteEntityDestino,
+                movimentoTransferenciaCredito
+        );
+
+        var movimentoDebitoOrigemEntity = movimentoContaCorrenteBuilder
+                .conta(contaCorrenteEntityOrigem)
+                .valor(transferenciaInputDTO.getValor())
+                .tipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_DEBITO)
+                .descricao(transferenciaInputDTO.getDescricao())
+                .build();
+
+        var movimentoCreditoDestinoEntity = movimentoContaCorrenteBuilder
+                .conta(contaCorrenteEntityDestino)
+                .valor(transferenciaInputDTO.getValor())
+                .tipoMovimento(TipoMovimento.TRANSFERENCIA_CONTA_CORRENTE_CREDITO)
+                .descricao("Entrada por transferência de conta corrente")
+                .build();
+
+        movimentoContaCorrenteRepository.saveAll(List.of(movimentoDebitoOrigemEntity, movimentoCreditoDestinoEntity));
         enviaTransacaoContaCorrenteComponent.publicarTransacao(movimentoTransferenciDebito);
         enviaTransacaoContaCorrenteComponent.publicarTransacao(movimentoTransferenciaCredito);
-
         enviadorEmailComponent.enviarEmailParaCliente(
                 contaCorrenteEntityDestino,
                 BankGomesConstantes.ASSUNTO_TRANSFERENCIA_ENTRE_CONTAS,
@@ -122,7 +139,7 @@ public class MovimentoContaCorrenteComponent implements Operacao {
     @Override
     @Transactional(readOnly = true)
     public List<MovimentoOutputDTO> consultarMovimento(Conta conta) {
-        return MovimentoContaCorrenteEntity.listEntityToListDTO(movRepository.findAll());
+        return MovimentoContaCorrenteEntity.listEntityToListDTO(movimentoContaCorrenteRepository.findAll());
     }
 
     @Override
@@ -134,5 +151,4 @@ public class MovimentoContaCorrenteComponent implements Operacao {
     public TipoConta getTipoOperacao() {
         return TipoConta.CC;
     }
-
 }

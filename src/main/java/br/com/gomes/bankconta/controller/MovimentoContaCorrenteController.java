@@ -51,7 +51,7 @@ public class MovimentoContaCorrenteController {
 
 	@PostMapping(value = "/transferir")
 	public ResponseEntity<TransferenciaOutputDTO> transferir(@RequestBody @Valid TransferenciaInputDTO transferenciaInputDTO) {
-		UUID identificador = movimentoContaCorrenteComponent.transferirContaCorrente(transferenciaInputDTO);
+		UUID identificador = movimentoContaCorrenteComponent.transferirValorContaCorrente(transferenciaInputDTO);
 		return ResponseEntity.ok(new TransferenciaOutputDTO(identificador, BankGomesConstantes.TRANSFERENCIA_CONCLUIDA));
 	}
 }

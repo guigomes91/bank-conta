@@ -1,15 +1,35 @@
 package br.com.gomes.bankconta.entities.movimento;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.com.gomes.bankconta.dto.movimento.MovimentoInputDTO;
 import br.com.gomes.bankconta.dto.movimento.MovimentoOutputDTO;
+import br.com.gomes.bankconta.entities.conta.Conta;
+import br.com.gomes.bankconta.enums.TipoMovimento;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class MovimentoContaCorrenteEntity extends MovimentoEntity {
-	
+
+	public MovimentoContaCorrenteEntity(
+			UUID id,
+			LocalDateTime dataHoraMovimento,
+			String numeroDocumento,
+			BigDecimal valor,
+			String descricao,
+			TipoMovimento tipoMovimento,
+			Conta conta) {
+		super(id, dataHoraMovimento, numeroDocumento, valor, descricao, tipoMovimento, conta);
+	}
+
 	public static MovimentoContaCorrenteEntity dtoToEntity(MovimentoInputDTO input) {
 		MovimentoContaCorrenteEntity entity = new MovimentoContaCorrenteEntity();
 		entity.setConta(input.getConta());
