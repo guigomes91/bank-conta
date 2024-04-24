@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:15.6-bullseye
+    container_name: gomes-bank-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SisPort@Server
+      POSTGRES_DB: gomes_bank
+    ports:
+      - "5432:5432"  # Encaminha a porta 5432 para permitir conexões externas
+    networks:
+      - bank_network
+
+  bank-conta:
+    image: bank-conta:1.0
+    container_name: bank-conta
+    restart: always
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: gomes-bank-postgres  # Nome do container do PostgreSQL
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SysPort@Server
+      POSTGRES_DB: gomes_bank
+    networks:
+      - bank_network
+
+networks:
+  bank_network:
+    driver: bridge

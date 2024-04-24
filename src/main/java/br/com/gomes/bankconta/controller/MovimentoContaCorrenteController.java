@@ -8,8 +8,10 @@ import br.com.gomes.bankconta.dto.movimento.TransferenciaOutputDTO;
 import br.com.gomes.bankconta.enums.TipoConta;
 import br.com.gomes.bankconta.service.impl.MovimentoServiceImpl;
 import br.com.gomes.bankconta.utils.BankGomesConstantes;
+import com.google.common.util.concurrent.RateLimiter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,6 +27,9 @@ public class MovimentoContaCorrenteController {
 
 	@Autowired
 	private MovimentoContaCorrenteComponent movimentoContaCorrenteComponent;
+
+	//Permite 5 requisições por minuto
+	private final RateLimiter rateLimiter = RateLimiter.create(5.0 / 60.0);
 
 	@PostMapping(value = "lancar")
 	public ResponseEntity<MovimentoOutputDTO> lancarMovimento(
@@ -44,6 +49,11 @@ public class MovimentoContaCorrenteController {
 	public ResponseEntity<MovimentoOutputDTO> consultaPorDocumento(
 			@PathVariable long cc,
 			@RequestParam(value = "numeroDocumento", required = true) String numeroDocumento) {
+
+		if (!rateLimiter.tryAcquire()) {
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+		}
+
 		var movimentoOutputDTO = movimentoContaCorrenteComponent.consultarMovimentoPorDocumento(cc, numeroDocumento);
 		return ResponseEntity.ok(movimentoOutputDTO);
 	}
