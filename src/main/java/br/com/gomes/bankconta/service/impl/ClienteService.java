@@ -2,6 +2,7 @@ package br.com.gomes.bankconta.service.impl;
 
 import java.util.UUID;
 
+import br.com.gomes.bankconta.service.metrics.CustomMetricsService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,9 @@ public class ClienteService {
 
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+
+	@Autowired
+	private CustomMetricsService metricsService;
 
 	@Transactional
 	public ClienteEntity create(ClienteDTO clienteDTO) {
@@ -58,8 +62,10 @@ public class ClienteService {
 
 	public Page<ClienteEntity> consultar(int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
-		
-		return new PageImpl<>(repository.findAll(), pageRequest, size);
+		var clienteEntities = new PageImpl<ClienteEntity>(repository.findAll(), pageRequest, size);
+		metricsService.incrementCustomMetric();
+
+		return clienteEntities;
 	}
 
 	public ClienteEntity consultarPorId(UUID id) {

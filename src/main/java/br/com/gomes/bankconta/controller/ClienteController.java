@@ -3,7 +3,9 @@ package br.com.gomes.bankconta.controller;
 import java.net.URI;
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +24,13 @@ import br.com.gomes.bankconta.entities.cliente.ClienteEntity;
 import br.com.gomes.bankconta.service.impl.ClienteService;
 import jakarta.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/clientes")
 public class ClienteController {
+
+	@Value("${server.port}")
+	private int porta;
 
 	@Autowired
 	private ClienteService service;
@@ -57,7 +63,7 @@ public class ClienteController {
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
 
 		Page<ClienteEntity> clientesEntityPage = service.consultar(page, size);
-
+		log.info("Consultando cliente na porta: {}", porta);
 		return ResponseEntity.ok(new ClienteDTO().entityPageToDTO(clientesEntityPage));
 	}
 
