@@ -3,6 +3,7 @@
 - Spring Boot 3.1.5
 - Java 17
 - Spring JPA
+- Spring Security
 - Validation do Hibernate
 - PostgreSQL
 - Lombok
@@ -12,6 +13,7 @@
 - Boas práticas de programação (DRY, KISS entre outros)
 - Design Patterns
 - SOLID
+- Docker
 
 Os microserviços seram executados dentro de containers do docker em uma VM do Linux.
 Será criado o microserviço [bank-client-transaction](https://github.com/guigomes91/bank-client-transaction) que registrara todas movimentações dos clientes utilizando MongoDB para armazenamento dos dados.  
