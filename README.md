@@ -3,6 +3,7 @@
 - Spring Boot 3.1.5
 - Java 17
 - Spring JPA
+- Hibernate
 - Spring Security
 - Validation do Hibernate
 - PostgreSQL
